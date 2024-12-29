@@ -1,0 +1,130 @@
+
+.tableContainer {
+    width: 100%;
+    padding: 20px;
+    border: 0.5px solid #E0E3E5;
+    border-radius: var(--border-radius-m);
+    background-color: var(--color-white);
+    overflow-x: auto;  /* Добавляем горизонтальный скролл, если таблица не помещается */
+
+    max-height: 400px;  /* Максимальная высота для контейнера */
+    overflow-y: auto;   /* Вертикальный скролл */
+}
+
+
+table {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.tableBodyContainer {
+    max-height: 500px; /* Ограничиваем высоту тела таблицы */
+    overflow-y: auto;  /* Вертикальный скролл для строк */
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--text-color-accent-blue);
+}
+
+th {
+    background-color: var(--background-color-logo);
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: var(--background-color-button);
+}
+
+.noMatches {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-color-accent-pink);
+}
+.smallTables{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 16px;
+
+}
+.blockTable{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+.detailsTable {
+    flex: 1 ;
+    padding: 20px;
+    border: 0.5px solid #E0E3E5;
+    border-radius: var(--border-radius-m);
+    background-color: var(--color-white);
+    overflow-x: auto;  /* Добавляем горизонтальный скролл, если таблица не помещается */
+
+    height: auto;  
+    max-height: 400px;
+    overflow-y: auto;   /* Вертикальный скролл */
+
+}
+
+
+/* Выбранная строка */
+.selectedRow {
+    background-color: var(--selected-row); /* Цвет для выделенной строки */
+}
+
+/* Цвет ховера на всех строках */
+tr:hover {
+    background-color: var(--background-color-button); /* Цвет для ховера */
+}
+
+/* Отключаем цвет ховера для выбранной строки */
+.selectedRow:hover {
+    background-color: var(--selected-row); /* Тот же цвет, что и у selectedRow */
+}
+
+.notesTitle {
+    font-weight: bold;
+    background-color: var(--background-color-logo);
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--text-color-accent-blue);
+    margin-top: 15px;
+}
+.notesBody{
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--text-color-accent-blue);
+}
+
+@media (max-width: 1400px) {
+    .detailsTable {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .detailsTable td, .detailsTable th { 
+        font-size: 12px;  
+    }
+
+    .notesTitle {
+        font-size: 12px;
+    }
+
+    .notesBody {
+        font-size: 12px;
+    }
+
+    .noMatches {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .detailsTable {
+        flex: 1 1 100%; /* Каждая таблица занимает 100% ширины */
+    }
+}

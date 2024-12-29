@@ -1,0 +1,22 @@
+.button {
+    width: 167px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: var(--border-radius-s);
+    background: var(--color-white);
+    color: var(--text-color-inactive);
+    font-size: var(--font-size-small);
+    margin-bottom: 8px;
+
+    &:hover, &.active {
+        color: var(--text-color);
+        border: var(--button-hover-border);
+    }
+
+    &.active {
+        background: var(--background-color-button);
+    }
+}
+.paddingLeft{
+    padding-left: 10px;
+}

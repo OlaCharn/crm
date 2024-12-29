@@ -1,0 +1,29 @@
+.button {
+    width: auto;
+    flex-shrink: 0;
+    border-radius: var(--border-radius-s);
+    height: auto;
+    font-size: var(--font-size-medium);
+    font-family: var(--font-main-regular);
+    //padding: 10px;
+    padding: 5px 10px ;
+    margin: 10px 0px 10px 0px;
+
+
+    &.green {
+        background: var(--text-color-accent-green);
+        color: var(--color-white);
+
+        &:hover {
+            background-color: var(--color-main-dark);
+        }
+    }
+    &.blue {
+        background: var(--background-color-logo);
+        color: var(--color-white);
+
+        &:hover {
+            background-color: var(--color-main-dark);
+        }
+    }
+}

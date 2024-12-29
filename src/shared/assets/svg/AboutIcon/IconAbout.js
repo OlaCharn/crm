@@ -1,0 +1,17 @@
+
+export const IconAbout = () => {
+    return(
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <g clipPath="url(#clip0_75_175)">
+    <path d="M9.99984 18.3333C14.6022 18.3333 18.3332 14.6023 18.3332 9.99996C18.3332 5.39759 14.6022 1.66663 9.99984 1.66663C5.39746 1.66663 1.6665 5.39759 1.6665 9.99996C1.6665 14.6023 5.39746 18.3333 9.99984 18.3333Z" stroke="#7B8085" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 13.3333V10" stroke="#7B8085" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="9.99984" cy="6.66671" r="0.833333" fill="#7B8085"/>
+        </g>
+    <defs>
+        <clipPath id="clip0_75_175">
+        <rect width="20" height="20" fill="white"/>
+        </clipPath>
+    </defs>
+    </svg>
+    )
+}

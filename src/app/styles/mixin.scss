@@ -1,0 +1,10 @@
+@import './media-queries.scss';
+
+@mixin section-style {
+    width: 1440px;
+    margin: auto;
+
+    @include tablet-l {
+        width: 1024px;
+    }
+}

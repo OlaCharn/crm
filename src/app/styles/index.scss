@@ -1,0 +1,13 @@
+@import "./normalize";
+@import './vars.scss';
+@import './media-queries.scss';
+@import './mixin.scss';
+
+
+
+body {
+    font-family: var(--font-main-regular);
+    color: var(--text-color); 
+    background-color: var(--background-color);
+    margin: 16px;
+}

@@ -1,0 +1,25 @@
+.button {
+    width: 185px;
+    flex-shrink: 0;
+    border-radius: var( --border-radius-s);
+    height: 35px;
+    font-size: var(--font-size-medium);
+    font-family: var(--font-main-regular);
+
+    &.green  {
+        background: var(--text-color-accent-green);
+        color: var(--color-white);
+    
+        &:hover {
+            background-color: var(--color-main-dark);
+        }
+    }
+    &.blue  {
+        background: var(--background-color-logo);
+        color: var(--color-white);
+    
+        &:hover {
+            background-color: var(--color-main-dark);
+        }
+    }
+}

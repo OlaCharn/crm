@@ -1,0 +1,16 @@
+
+.textWithToc {
+    display: flex;
+    flex-direction: column;
+    height: 80vh; /* Устанавливаем высоту на 80vh */
+}
+
+.contentContainer {
+    overflow-y: auto; /* Включаем вертикальную прокрутку */
+    flex-grow: 1; /* Занимает оставшееся пространство */
+}
+.up {
+    margin-left: auto;
+    margin-top: 10px;
+}
+

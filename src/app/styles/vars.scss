@@ -1,0 +1,40 @@
+@import "./fonts.scss";
+
+:root{
+  /* Color styles */
+    --color-white: rgba(255, 255, 255, 1);
+    --color-main-dark: #002D41; /* instead black */
+    --background-color: #F6F6F6; 
+
+    /* Основной шрифт Lato */
+    --font-main-regular: "Lato", sans-serif;    /* Обычный шрифт */
+    --font-main-bold: "Lato Bold", sans-serif;  /* Жирный шрифт */
+    --font-main-light: "Lato Light", sans-serif; /* Легкий шрифт */
+
+    /* Размер шрифта */
+    --font-size-small: 14px;
+    --font-size-medium: 16px;
+    --font-size-large: 18px;
+    --font-size-xLarge: 25px;
+    --font-size-xlLarge: 30px;
+    --font-size-huge: 50px;
+
+    /* Цвет текста */
+    --text-color: #002D41;
+    --text-color-inactive: #7B8085;
+    --text-color-accent-pink: #FF4AC0; 
+    --text-color-accent-green: #9AD302;
+    --text-color-accent-blue: #029AD3; 
+
+    /*Hover-effects*/
+    --background-color-button:  #4CC1FF33;
+    --selected-row:#9bd3025d;
+    --button-hover-border: 0.5px solid #029AD3;
+    --background-color-logo: #4CC1FF;
+
+    /* Style variables */
+    --border-radius-s: 5px;
+    --border-radius-m: 7px;
+    --border-radius-l: 10px;
+    --border-radius-xxxl: 30px;
+}

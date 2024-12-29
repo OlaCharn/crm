@@ -1,0 +1,10 @@
+.box{
+    width: 184px;
+    height: 100vh;
+    flex-shrink: 0;
+    border-radius: var(--border-radius-s);
+    border: 0.5px solid #E0E3E5;
+    background: var(--color-white);
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
