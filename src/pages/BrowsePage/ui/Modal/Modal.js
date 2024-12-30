@@ -1,6 +1,28 @@
 import styles from "./Modal.module.scss";
 
-// Modal.js
+export const Modal = ({ title, children, onClose }) => {
+    return (
+        <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+                {/* Заголовок с кнопкой закрытия */}
+                <div className={styles.modalHeader}>
+                    {title && <h3>{title}</h3>}
+                    <button
+                        onClick={onClose}
+                        className={styles.closeButton}
+                        aria-label="Close modal"
+                    >
+                        &times;
+                    </button>
+                </div>
+                {/* Основной контент */}
+                <div className={styles.modalBody}>{children}</div>
+            </div>
+        </div>
+    );
+};
+
+/* Modal.js
 import React from 'react';
 
 export const Modal = ({ isOpen, closeModal, contentType, data }) => {
@@ -12,14 +34,12 @@ export const Modal = ({ isOpen, closeModal, contentType, data }) => {
                 return (
                     <div>
                         <h2>Add New Person</h2>
-                        {/* Здесь можно разместить форму для добавления */}
                     </div>
                 );
             case 'edit':
                 return (
                     <div>
                         <h2>Edit Person</h2>
-                        {/* Здесь можно разместить форму для редактирования */}
                     </div>
                 );
             case 'delete':
@@ -45,23 +65,4 @@ export const Modal = ({ isOpen, closeModal, contentType, data }) => {
 };
 
 
-/*
-const Modal = ({ title, children, onConfirm, onCancel }) => {
-    return (
-        <div className={styles.modalOverlay}>
-            <div className={styles.modalContent}>
-                <h3>{title}</h3>
-                <div className={styles.modalBody}>{children}</div>
-                <div className={styles.modalActions}>
-                    <button onClick={onCancel} className={styles.cancelButton}>
-                        Cancel
-                    </button>
-                    <button onClick={onConfirm} className={styles.confirmButton}>
-                        Delete
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
 */

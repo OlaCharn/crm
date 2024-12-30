@@ -12,8 +12,10 @@ import styles from "./BrowseTable.module.scss"
 import { ActionButton } from "./Buttons/ActionButton";
 import { Stack } from "../../../shared/ui/Stack/Stack";
 import apiService from "../Services/apiService.js";
-import actionConfig from "../Services/actionConfig.js";
 import { Modal } from "./Modal/Modal.js";
+import { EditForm } from "../Forms/EditForm.js";
+import { DeleteForm } from "../Forms/DeleteForm.js";
+import { MessageForm } from "../Forms/MessageForm.js";
 
 // Кастомный фильтр для fuzzy поиска
 const fuzzyFilter = (row, columnId, value) => {
@@ -39,7 +41,7 @@ export const BrowseTable = () => {
 
     //Модальное окно
     const [isModalOpen, setModalOpen] = useState(false);
-
+    const [modalContent, setModalContent] = useState(null);
 
     // Загрузка данных при монтировании компонента
     useEffect(() => {
@@ -65,21 +67,39 @@ export const BrowseTable = () => {
     const handleDeleteClick = async () => {
         // Проверка, есть ли выбранная строка
         if (!selectedRow) return;
-    
         try {
-            // Запрос на удаление записи по selectedRow.id
-            await apiService.deletePerson(selectedRow.id);
-    
-            // Если запрос прошел успешно, перезагружаем данные с сервера
-            const fetchedData = await apiService.fetchPersons();  // Получаем актуальные данные
-    
-            // Обновляем состояние с новыми данными
-            setData(fetchedData);
-    
-    
+            await apiService.deletePerson(selectedRow.id);          // Запрос на удаление записи по selectedRow.id
+            const fetchedData = await apiService.fetchPersons();    // Если запрос прошел успешно, перезагружаем данные с сервера
+            setData(fetchedData);                                   // Обновляем состояние с новыми данными
+            handleCloseModal();                                     // Закрытие модального окна
         } catch (error) {
             console.error("Ошибка при удалении", error);
         }
+    };
+
+    //функция для кнопки Edit
+    const handleEditSubmit = async (updatedData) => {
+        try {
+            await apiService.updatePerson(selectedRow.id, updatedData); // API-запрос
+            const fetchedData = await apiService.fetchPersons();       // Перезагрузка данных
+            setData(fetchedData);                                      // Обновление таблицы
+            handleCloseModal();                                        // Закрытие модального окна
+        } catch (err) {
+            console.error("Ошибка при обновлении данных:", err.message);
+        }
+    };
+
+     // Открытие модального окна
+    const handleOpenModal = (content) => {
+        setModalContent(content);
+        setModalOpen(true);
+        console.log("I am open")
+    };
+
+    // Закрытие модального окна
+    const handleCloseModal = () => {
+        setModalOpen(false);
+        setModalContent(null);
     };
     
     // Обработчик клика по строке
@@ -212,9 +232,6 @@ export const BrowseTable = () => {
     const filteredRows = table.getRowModel()?.rows;  // Получаем отфильтрованные строки
     const noMatches = filteredRows && filteredRows.length === 0;  // Если строк нет, устанавливаем флаг noMatches
 
-    //Модальное окно 
-
-
     // Если данные загружаются, показываем "Loading..."
     if (isLoading) {
         return <div>Loading...</div>;
@@ -245,17 +262,19 @@ export const BrowseTable = () => {
                 >
                     <ActionButton
                         variant="green"
+                        onClick={() => handleOpenModal()}
                         >
                         Add
                     </ActionButton>
                     <ActionButton
                         variant="green"
+                        onClick={()=> selectedRow? handleOpenModal(<EditForm selectedRow={selectedRow} onSubmit={handleEditSubmit} /> ) : handleOpenModal(<MessageForm onclose={handleCloseModal} />)}
                         >
                         Edit
                     </ActionButton>
                     <ActionButton
                         variant="green"
-                        onClick={handleDeleteClick}
+                        onClick={ () => selectedRow? handleOpenModal( <DeleteForm selectedRow={selectedRow} onDelete={handleDeleteClick} onCancel={handleCloseModal} /> ) : handleOpenModal(<MessageForm onclose={handleCloseModal} />) }
                     >
                         Delete
                     </ActionButton>
@@ -316,27 +335,6 @@ export const BrowseTable = () => {
             <div className={styles.blockTable}>
             <div>
                 <h3>Phones</h3>
-                <Stack 
-                    direction="row" 
-                    justify = "justifyStart"
-                    gap={16}
-                >
-                    <ActionButton
-                        variant="green"
-                        >
-                        Add
-                    </ActionButton>
-                    <ActionButton
-                        variant="green"
-                        >
-                        Edit
-                    </ActionButton>
-                    <ActionButton
-                        variant="green"
-                        >
-                        Delete
-                    </ActionButton>
-                </Stack>
 
                 <div className={styles.detailsTable}>
                     <table>
@@ -375,27 +373,6 @@ export const BrowseTable = () => {
 
                 <div>
                 <h3>Emails</h3>
-                <Stack 
-                    direction="row" 
-                    justify = "justifyStart"
-                    gap={16}
-                >
-                    <ActionButton
-                        variant="green"
-                        >
-                        Add
-                    </ActionButton>
-                    <ActionButton
-                        variant="green"
-                        >
-                        Edit
-                    </ActionButton>
-                    <ActionButton
-                        variant="green"
-                        >
-                        Delete
-                    </ActionButton>
-                </Stack>
 
                 <div className={styles.detailsTable}>
                     <table>
@@ -436,28 +413,6 @@ export const BrowseTable = () => {
                 <div className={styles.blockTable}>
                 <div>
                 <h3>Contacted</h3>
-                <Stack 
-                    direction="row" 
-                    justify = "justifyStart"
-                    gap={16}
-                >
-                    <ActionButton
-                        variant="green"
-                        >
-                        Add
-                    </ActionButton>
-                    <ActionButton
-                        variant="green"
-                        >
-                        Edit
-                    </ActionButton>
-                    <ActionButton
-                        variant="green"
-                        >
-                        Delete
-                    </ActionButton>
-                </Stack>
-
                 <div className={styles.detailsTable}>
                     <table>
                         <thead>
@@ -496,28 +451,6 @@ export const BrowseTable = () => {
 
                 <div>
                 <h3>Participated</h3>
-                <Stack 
-                    direction="row" 
-                    justify = "justifyStart"
-                    gap={16}
-                >
-                    <ActionButton
-                        variant="green"
-                        >
-                        Add
-                    </ActionButton>
-                    <ActionButton
-                        variant="green"
-                        >
-                        Edit
-                    </ActionButton>
-                    <ActionButton
-                        variant="green"
-                        >
-                        Delete
-                    </ActionButton>
-                </Stack>
-
                 <div className={styles.detailsTable}>
                     <table>
                         <thead>
@@ -558,11 +491,6 @@ export const BrowseTable = () => {
         <div className={styles.blockTable}>
                 <div>
                 <h3>Notes</h3>
-                <ActionButton 
-                    variant="green" 
-                >
-                    Edit
-                </ActionButton>
                 <div className={styles.detailsTable}>
                     <table>
                         <thead>
@@ -592,6 +520,12 @@ export const BrowseTable = () => {
                 </div>
         </div>
         </div>
+        {/* Модальное окно */}
+        {isModalOpen && (
+            <Modal title="Action Modal" onClose={handleCloseModal}>
+                {modalContent}
+            </Modal>
+        )}
         </>
     );
 };

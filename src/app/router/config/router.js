@@ -17,19 +17,19 @@ import { IconSettingsHover } from "../../../shared/assets/svg/SettingsIcon/IconS
 
 
 export const routers = {
-    dashboard: {
-        path: "/",
-        title: "Dashboard",
-        icon: <IconDashboard />,
-        hoveredIcon: <IconDashboardHover />,
-        element: <DashboardPage />
-    },
     browse: {
-        path: "/browse",
+        path: "/",
         title: "Browse",
         icon: <IconBrowse />,
         hoveredIcon:<IconBrowseHover /> ,
         element: <BrowsePage/>
+    },
+    dashboard: {
+        path: "/dashboard",
+        title: "Dashboard",
+        icon: <IconDashboard />,
+        hoveredIcon: <IconDashboardHover />,
+        element: <DashboardPage />
     },
     settings: {
         path: "/settings",
