@@ -16,6 +16,7 @@ import { Modal } from "./Modal/Modal.js";
 import { EditForm } from "../Forms/EditForm.js";
 import { DeleteForm } from "../Forms/DeleteForm.js";
 import { MessageForm } from "../Forms/MessageForm.js";
+import AddForm from "../Forms/AddForm.js";
 
 // Кастомный фильтр для fuzzy поиска
 const fuzzyFilter = (row, columnId, value) => {
@@ -42,6 +43,7 @@ export const BrowseTable = () => {
     //Модальное окно
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState(null);
+    const [modalTitle, setModalTitle] = useState(""); // Состояние для заголовка
 
     // Загрузка данных при монтировании компонента
     useEffect(() => {
@@ -80,7 +82,7 @@ export const BrowseTable = () => {
     //функция для кнопки Edit
     const handleEditSubmit = async (updatedData) => {
         try {
-            await apiService.updatePerson(selectedRow.id, updatedData); // API-запрос
+            await apiService.editPerson(selectedRow.id, updatedData); // API-запрос
             const fetchedData = await apiService.fetchPersons();       // Перезагрузка данных
             setData(fetchedData);                                      // Обновление таблицы
             handleCloseModal();                                        // Закрытие модального окна
@@ -89,11 +91,27 @@ export const BrowseTable = () => {
         }
     };
 
+    //функция для кнопки Add
+    const handleAddPerson = async (data) => {
+        try {
+            //await apiService.addPerson(data);
+            // Вместо повторного запроса данных можно просто обновить локальный список
+            const jsonResponse = await apiService.addPerson(data);  // Получаем данные от сервера
+            // Обновляем локальный список, добавляя полученные с сервера данные
+            setData((prevData) => [...prevData, jsonResponse]);  
+            //const fetchedData = await apiService.fetchPersons();       // Перезагрузка данных
+            //setData(fetchedData);                                      // Обновление таблицы
+            handleCloseModal(); 
+        } catch (error) {
+            console.error("Failed to add person:", error);
+        }  
+        };
+
      // Открытие модального окна
-    const handleOpenModal = (content) => {
+    const handleOpenModal = (content, title) => {
+        setModalTitle(title);
         setModalContent(content);
         setModalOpen(true);
-        console.log("I am open")
     };
 
     // Закрытие модального окна
@@ -229,7 +247,7 @@ export const BrowseTable = () => {
     }
 
     // Проверяем, есть ли отфильтрованные строки
-    const filteredRows = table.getRowModel()?.rows;  // Получаем отфильтрованные строки
+    const filteredRows = table.getRowModel()?.rows;               // Получаем отфильтрованные строки
     const noMatches = filteredRows && filteredRows.length === 0;  // Если строк нет, устанавливаем флаг noMatches
 
     // Если данные загружаются, показываем "Loading..."
@@ -262,19 +280,21 @@ export const BrowseTable = () => {
                 >
                     <ActionButton
                         variant="green"
-                        onClick={() => handleOpenModal()}
+                        onClick={() => handleOpenModal(<AddForm title="Add Person" onSubmit={handleAddPerson} closeModal={handleCloseModal} />  )}
                         >
                         Add
                     </ActionButton>
                     <ActionButton
                         variant="green"
-                        onClick={()=> selectedRow? handleOpenModal(<EditForm selectedRow={selectedRow} onSubmit={handleEditSubmit} /> ) : handleOpenModal(<MessageForm onclose={handleCloseModal} />)}
+                        onClick={()=> selectedRow? handleOpenModal(<EditForm title="Edit Person" selectedRow={selectedRow} onSubmit={handleEditSubmit} closeModal={handleCloseModal}/> )     
+                                                    : handleOpenModal(<MessageForm  onclose={handleCloseModal} />)}
                         >
                         Edit
                     </ActionButton>
                     <ActionButton
                         variant="green"
-                        onClick={ () => selectedRow? handleOpenModal( <DeleteForm selectedRow={selectedRow} onDelete={handleDeleteClick} onCancel={handleCloseModal} /> ) : handleOpenModal(<MessageForm onclose={handleCloseModal} />) }
+                        onClick={ () => selectedRow? handleOpenModal(<DeleteForm title="Delete Person" selectedRow={selectedRow} onDelete={handleDeleteClick} onCancel={handleCloseModal} /> ) 
+                                                    : handleOpenModal(<MessageForm onclose={handleCloseModal} />) }
                     >
                         Delete
                     </ActionButton>
@@ -522,7 +542,7 @@ export const BrowseTable = () => {
         </div>
         {/* Модальное окно */}
         {isModalOpen && (
-            <Modal title="Action Modal" onClose={handleCloseModal}>
+            <Modal title={modalTitle} onClose={handleCloseModal}>
                 {modalContent}
             </Modal>
         )}

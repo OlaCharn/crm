@@ -1,6 +1,7 @@
-import { ActionButton } from "../ui/Buttons/ActionButton";
+import { Stack } from "../../../shared/ui/Stack/Stack";
+import styles from "./Form.module.scss"
 
-export const DeleteForm = ({ selectedRow, onDelete, onCancel }) => {
+export const DeleteForm = ({ selectedRow, onDelete, onCancel ,  title}) => {
     /*
     if (!selectedRow) {
         return <p>No record selected for deletion.</p>;
@@ -8,20 +9,21 @@ export const DeleteForm = ({ selectedRow, onDelete, onCancel }) => {
     */
 
     return (
-        <div >
-            <h3>Confirm Deletion</h3>
-            <p>
+        <Stack direction="column" gap={16} >
+            <h3>{title}</h3> 
+                <p>
             Are you sure you want to delete the record for{" "}
-            <strong>{selectedRow.first_name} {selectedRow.last_name}</strong>?
+            <strong>{selectedRow.first_name} {selectedRow.last_name}, date of birth : {selectedRow.birth_date} </strong>?
             </p>
-            <div >
-            <ActionButton  onClick={onDelete}>
-                Delete
-            </ActionButton>
-            <ActionButton  onClick={onCancel}>
+            <Stack gap={16}>
+            <button className={styles.cancelButton}  onClick={onCancel}>
                 Cancel
-            </ActionButton>
-            </div>
-        </div>
+            </button>
+            <button className={styles.button} onClick={onDelete}>
+                Delete
+            </button>
+
+            </Stack>
+        </Stack>
     );
 };

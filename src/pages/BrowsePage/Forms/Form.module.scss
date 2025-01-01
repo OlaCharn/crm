@@ -1,0 +1,130 @@
+
+.label {
+    font-family: var(--font-main-bold);
+    font-size: var(--font-size-medium);
+    color: var(--text-color);
+}
+
+.input,
+.select,
+.textarea {
+    font-family: var(--font-main-regular);
+    font-size: var(--font-size-medium);
+    padding: 5px;
+    border: 1px solid var(--text-color-inactive);
+    border-radius: var(--border-radius-s);
+    //width: 470px;
+    min-width: 650px;
+    width: auto;
+    transition: border-color 0.3s;
+}
+.inputSmall {
+    font-family: var(--font-main-regular);
+    font-size: var(--font-size-medium);
+    padding: 5px;
+    border: 1px solid var(--text-color-inactive);
+    border-radius: var(--border-radius-s);
+    transition: border-color 0.3s;
+    flex: 1;         /* Растягиваем инпуты */
+    min-width: 0;    /* Избегаем конфликтов с flex */
+}
+.inputDate{
+    font-family: var(--font-main-regular);
+    font-size: var(--font-size-medium);
+    padding: 5px;
+    border: 1px solid var(--text-color-inactive);
+    border-radius: var(--border-radius-s);
+    transition: border-color 0.3s;
+    width: auto;
+
+}
+.radioLabel{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus,
+.inputSmall:focus,
+.inputDate:focus {
+    border-color: var(--text-color-accent-blue);
+    outline: none;
+}
+
+.errorMessage {
+    font-family: var(--font-main-regular);
+    font-size: var(--font-size-small);
+    color: var(--text-color-accent-pink);
+    margin-top: 4px;
+}
+.inputWrapper {
+    display: flex;
+    flex-direction: column; /* Поле ввода сверху, сообщение об ошибке снизу */
+    position: relative; /* Для стабильного позиционирования */
+}
+
+.button {
+    font-family: var(--font-main-bold);
+    font-size: var(--font-size-medium);
+    padding: 10px 20px;
+    background-color: var(--text-color-accent-green);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-m);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: var(--text-color-accent-blue);
+
+}
+
+.removeButton {
+    background-color: var(--text-color-accent-pink);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-s);
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+}
+
+.removeButton:hover {
+    background-color: #e94785ef;
+}
+
+.addButton {
+    background-color: var(--background-color-logo);
+    color: var(--text-color);
+    border: none;
+    border-radius: var(--border-radius-s);
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.addButton:hover {
+    background-color: var(--text-color-accent-blue);
+}
+.cancelButton{
+    font-family: var(--font-main-bold);
+    font-size: var(--font-size-medium);
+    padding: 10px 20px;
+    background-color: var(--text-color-inactive);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-m);
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+}
+.cancelButton:hover {
+    background-color: var(--text-color-accent-blue);
+
+}
+.birthMargin{
+    margin-right: 16px;
+}
