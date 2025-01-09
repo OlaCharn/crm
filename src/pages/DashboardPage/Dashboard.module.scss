@@ -1,0 +1,47 @@
+
+.inputDate {
+    font-family: var(--font-main-regular);
+    font-size: var(--font-size-medium);
+    padding: 8px 12px;
+    border: 0.5px solid var(--text-color-border-grey);
+    border-radius: var(--border-radius-s);
+    transition: border-color 0.3s;
+    width: 150px; 
+    box-sizing: border-box; 
+    &::placeholder {
+        color: var( --text-color-accent-blue);  
+    }
+}
+
+.inputDate:focus {
+    border-color: var(--text-color-accent-blue);
+    outline: none;
+}
+
+.errorMessage {
+    font-family: var(--font-main-regular);
+    font-size: var(--font-size-small);
+    color: var(--text-color-accent-pink);
+    margin-top: 4px;
+}
+.resultMessage {
+    font-family: var(--font-main-regular);
+    margin-top: 10px;
+    font-family: var(--font-main-bold);
+}
+.button {
+    font-family: var(--font-main-bold);
+    font-size: var(--font-size-medium);
+    padding: 10px 20px;
+    background-color: var(--text-color-accent-green);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-m);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: var(--text-color-accent-blue);
+
+}

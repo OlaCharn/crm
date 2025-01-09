@@ -3,11 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './app/styles/index.scss';
 import App from './app/App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+
+// We are going to use different base names for development und production environments
+const basename = process.env.REACT_APP_BASENAME || '';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter basename={basename}>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
 

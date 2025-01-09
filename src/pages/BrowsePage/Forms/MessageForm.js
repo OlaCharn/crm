@@ -4,7 +4,7 @@ import { ActionButton } from "../ui/Buttons/ActionButton"
 export const MessageForm= ({onclose}) => {
     return(
         <Stack direction="column" gap={16} >
-            Select a row!
+            <p>Select a row!</p>
             <ActionButton variant="green" onClick={onclose} > 
                 OK
             </ActionButton>

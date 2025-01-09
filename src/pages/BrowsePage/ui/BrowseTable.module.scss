@@ -1,24 +1,28 @@
+.wrapper{
+    padding-top: 20px;
+    background-color: var(--color-white);
+    width: 100%;
+    border: 0.5px solid var(--text-color-border-grey);
+    border-radius: var(--border-radius-m);
+    background-color: var(--color-white);
 
+}
 .tableContainer {
     width: 100%;
-    padding: 20px;
-    border: 0.5px solid #E0E3E5;
+    padding-left: 20px;
+    padding-right: 20px;
+    //border: 0.5px solid var(--text-color-border-grey);
     border-radius: var(--border-radius-m);
     background-color: var(--color-white);
     overflow-x: auto;  /* Добавляем горизонтальный скролл, если таблица не помещается */
-
     max-height: 400px;  /* Максимальная высота для контейнера */
     overflow-y: auto;   /* Вертикальный скролл */
 }
-
-
 table {
     width: 100%;
-    margin-top: 15px;
 }
-
 .tableBodyContainer {
-    max-height: 500px; /* Ограничиваем высоту тела таблицы */
+    max-height: 500px; 
     overflow-y: auto;  /* Вертикальный скролл для строк */
 }
 
@@ -31,8 +35,10 @@ th, td {
 th {
     background-color: var(--background-color-logo);
     font-weight: bold;
+    position: sticky; /* Закрепляем заголовок */
+    top: 0; /* Закрепляем на верхней части контейнера */
+    z-index: 1; /* заголовки будут поверх содержимого */
 }
-
 tbody tr:hover {
     background-color: var(--background-color-button);
 }
@@ -63,27 +69,25 @@ tbody tr:hover {
     border-radius: var(--border-radius-m);
     background-color: var(--color-white);
     overflow-x: auto;  /* Добавляем горизонтальный скролл, если таблица не помещается */
-
-    height: auto;  
+    height: 200px;  
     max-height: 400px;
-    overflow-y: auto;   /* Вертикальный скролл */
-
+    overflow-y: auto;   
 }
 
 
 /* Выбранная строка */
 .selectedRow {
-    background-color: var(--selected-row); /* Цвет для выделенной строки */
+    background-color: var(--selected-row); 
 }
 
 /* Цвет ховера на всех строках */
 tr:hover {
-    background-color: var(--background-color-button); /* Цвет для ховера */
+    background-color: var(--background-color-button); 
 }
 
 /* Отключаем цвет ховера для выбранной строки */
 .selectedRow:hover {
-    background-color: var(--selected-row); /* Тот же цвет, что и у selectedRow */
+    background-color: var(--selected-row); 
 }
 
 .notesTitle {
@@ -107,15 +111,15 @@ tr:hover {
     }
 
     .detailsTable td, .detailsTable th { 
-        font-size: 12px;  
+        font-size: var(--font-size-xssmall);  
     }
 
     .notesTitle {
-        font-size: 12px;
+        font-size: var(--font-size-xssmall);
     }
 
     .notesBody {
-        font-size: 12px;
+        font-size: var(--font-size-xssmall);
     }
 
     .noMatches {

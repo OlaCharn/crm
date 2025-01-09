@@ -4,7 +4,7 @@ import styles from "./Form.module.scss"
 import { BsTrash } from "react-icons/bs";
 import { BsPlusLg } from "react-icons/bs";
 
-const AddForm = ({ onSubmit , closeModal,  title }) => {
+const AddForm = ({ onSubmit , closeModal }) => {
     const {
         register,
         handleSubmit,
@@ -53,7 +53,6 @@ const AddForm = ({ onSubmit , closeModal,  title }) => {
     return (
         <form onSubmit={handleSubmit(submitForm)}>
             <Stack direction="column" gap={8} align="alignStart" >
-            <h3>{title}</h3>
                 <Stack direction="row" gap={8} align="alignCenter" justify="justifyBetween" max>
                     <label className={styles.label}>First Name:</label>
                     <div className={styles.inputWrapper}>
@@ -174,11 +173,15 @@ const AddForm = ({ onSubmit , closeModal,  title }) => {
                 <label className={styles.label}>Internal/External:</label>
                 <Stack gap={16} >
                     <label className={`${styles.radioLabel} ${styles.birthMargin}`} >
-                        <input type="radio" value="int" {...register("intern_extern", { required: false })} /> Int
+                        <input type="radio" value="int" {...register("intern_extern", { required: false })} /> Intern
                     </label>
                     <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
-                        <input type="radio" value="ext" {...register("intern_extern", { required: false })} /> Ext
+                        <input type="radio" value="ext" {...register("intern_extern", { required: false })} /> Extern
                     </label>
+                    <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
+                        <input type="radio" value="ex-int" {...register("intern_extern", { required: false })} /> Ex-Intern
+                    </label>
+
                 </Stack>
                 {errors.intern_extern && <span>This field is required</span>}
             </Stack>
@@ -273,12 +276,3 @@ const AddForm = ({ onSubmit , closeModal,  title }) => {
 
 export default AddForm;
 
-/*
-                <Stack  max justify="justifyBetween">
-                    <label className={styles.label} >First Name:</label>
-                    <input className={styles.input} {...register("first_name", { required: true })} />
-                    {errors.last_name && <span className={styles.errorMessage}>This field is required</span>}
-                </Stack>
-
-
-*/

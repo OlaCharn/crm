@@ -58,9 +58,7 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
 
     return (
         <form onSubmit={handleSubmit(submitForm)}>
-            <Stack direction="column" gap={8} align="alignStart">
-            <h3>{title}</h3>
-                
+            <Stack direction="column" gap={8} align="alignStart">               
                 {/* First Name */}
                 <Stack direction="row" gap={8} align="alignCenter" justify="justifyBetween" max>
                     <label className={styles.label}>First Name:</label>
@@ -184,11 +182,15 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
                     <label className={styles.label}>Internal/External:</label>
                     <Stack gap={16} >
                         <label className={`${styles.radioLabel} ${styles.birthMargin}`} >
-                            <input type="radio" value="int" {...register("intern_extern", { required: false })} /> Int
+                            <input type="radio" value="int" {...register("intern_extern", { required: false })} /> Intern
                         </label>
                         <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
-                            <input type="radio" value="ext" {...register("intern_extern", { required: false })} /> Ext
+                            <input type="radio" value="ext" {...register("intern_extern", { required: false })} /> Extern
                         </label>
+                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
+                            <input type="radio" value="ex-int" {...register("intern_extern", { required: false })} /> Ex-Intern
+                        </label>
+                        
                     </Stack>
                     {errors.intern_extern && <span>This field is required</span>}
                 </Stack>
