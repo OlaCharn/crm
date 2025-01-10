@@ -83,7 +83,7 @@ const apiService = {
         if (data) {
             return JSON.parse(data); // или используем json(), если ответ действительно JSON
         } else {
-            return {}; // В случае пустого ответа возвращаем пустой объект
+            return {}; 
         }
     },
     registerUser: async (data) => {
@@ -93,21 +93,19 @@ const apiService = {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
-    
             if (!response.ok) {
                 if (response.status === 409) {
-                    const error = new Error('User already exists'); // Создаем ошибку с сообщением
-                    error.code = 409; // Добавляем свойство для кода ошибки
+                    // Возвращаем ошибку с кодом 409, если пользователь уже существует
+                    const error = new Error('User already exists');
+                    error.code = 409;
                     throw error; // Выбрасываем ошибку
                 }
                 throw new Error('Server error: ' + response.statusText);
             }
-    
             const jsonResponse = await response.json();
-            console.log(jsonResponse);
-            return jsonResponse;
+            return jsonResponse; // Возвращаем данные в случае успеха
         } catch (error) {
-            console.error(error);
+            console.error(error); // Логируем ошибку
             throw error; // Пробрасываем ошибку наверх
         }
     },

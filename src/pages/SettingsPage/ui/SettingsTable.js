@@ -92,16 +92,17 @@ export const SettingsTable = () => {
     const handleRegisterUser = async (data) => {
         try {
             const jsonResponse = await apiService.registerUser(data);                         // Получаем данные от сервера
-            if (jsonResponse.error && jsonResponse.error.code === 409) {
-                // Если ошибка 409, то значит такой юзер уже существует
-                alert("User already exists. Please choose a different name.");
-                return; // Прерываем выполнение функции
-            }
             setData((prevData) => [...prevData, jsonResponse]);                            // Обновляем локальный список, добавляя полученные с сервера данные
             handleCloseModal(); 
         } catch (error) {
             console.error("Failed to add person:", error);
-        }  
+            // Показать alert, если это ошибка 409 (пользователь уже существует)
+            if (error.code === 409) {
+                alert("User already exists. Please choose a different name.");
+            } else {
+                alert("An error occurred. Please try again later.");
+            }
+        }
     };
 
      // Открытие модального окна
@@ -122,7 +123,7 @@ export const SettingsTable = () => {
     const handleRowClick = (row) => {
         setSelectedRow(row.original);  // Используем `row.original` для получения данных строки
     };
-    
+
     const columns = useMemo(
         () => [
             columnHelper.accessor("name", {
