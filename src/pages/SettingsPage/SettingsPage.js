@@ -1,6 +1,10 @@
+import { SettingsTable } from "./ui/SettingsTable";
+
 const SettingsPage = () =>{
     return(
-        <div>Settings</div>
+        <div>
+            <SettingsTable />
+        </div>
     )
 }
 export default SettingsPage;

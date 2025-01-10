@@ -1,4 +1,4 @@
-import { getStyles } from "../../../../shared/lib/getStyles";
+import { getStyles } from "../../lib/getStyles";
 import styles from "./ActionButton.module.scss";
 
 export const ActionButton = ({
@@ -21,6 +21,7 @@ export const ActionButton = ({
 
     return (
         <button 
+        action="scroll"
             className={classes}
             onClick={handleClick}
             {...otherProps}>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { BoxWhiteBackground } from "../../shared/ui/BoxWhiteBackground/BoxWhiteBackground";
-import apiService from "../BrowsePage/Services/apiService";
+import apiService from "../../app/Services/apiService";
 import { Stack } from "../../shared/ui/Stack/Stack";
 import styles from "./Dashboard.module.scss"
 //import { ActionButton } from "../BrowsePage/ui/Buttons/ActionButton";

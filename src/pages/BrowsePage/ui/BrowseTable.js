@@ -10,14 +10,14 @@ import { useReactTable,
         from "@tanstack/react-table";
 import GlobalFilter from "./ClobalFilter";
 import styles from "./BrowseTable.module.scss"
-import { ActionButton } from "./Buttons/ActionButton";
+import { ActionButton } from "../../../shared/ui/Buttons/ActionButton.js";
 import { Stack } from "../../../shared/ui/Stack/Stack";
-import apiService from "../Services/apiService.js";
-import { Modal } from "./Modal/Modal.js";
+import apiService from "../../../app/Services/apiService.js";
+import { Modal } from "../../../shared/ui/Modal/Modal.js";
 import { EditForm } from "../Forms/EditForm.js";
 import { DeleteForm } from "../Forms/DeleteForm.js";
 import { MessageForm } from "../Forms/MessageForm.js";
-import AddForm from "../Forms/AddForm.js";
+import { AddForm } from "../Forms/AddForm.js";
 import { ArrowUp } from "../../../shared/assets/svg/ArrowUpAndDown/ArrowUp.js";
 import { ArrowDown } from "../../../shared/assets/svg/ArrowUpAndDown/ArrowDown.js";
 

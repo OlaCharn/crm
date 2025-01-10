@@ -1,15 +1,16 @@
 // TODO implement proper reading of settings
 const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST || 'echo';
 const BACKEND_PORT = process.env.REACT_APP_BACKEND_PORT || 3011;
-const API_BASE_URL = `http://${BACKEND_HOST}:${BACKEND_PORT}/api/persons`;
+const API_BASE_URL = `http://${BACKEND_HOST}:${BACKEND_PORT}/api`;
 //const BACKEND_HOST = window._env_?.REACT_APP_API_URL || "http://localhost"; // Фallback на localhost
 //const API_BASE_URL = `${BACKEND_HOST}${window._env_.REACT_APP_API_PERSONS?.apiPersonsPrefix || "/api/persons"}`;
 
 
 const apiService = {
+    //для BrowsePage
     deletePerson: async (personId) => {
         console.log(personId)
-        const response = await fetch(`${API_BASE_URL}/deletePerson/${personId}`, {
+        const response = await fetch(`${API_BASE_URL}/persons/deletePerson/${personId}`, {
             method: "DELETE",
         });
 
@@ -26,7 +27,7 @@ const apiService = {
         }
     },
     addPerson: async (data) => {
-        const response = await fetch(`${API_BASE_URL}/addPerson`, {
+        const response = await fetch(`${API_BASE_URL}/persons/addPerson`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -39,7 +40,7 @@ const apiService = {
         return jsonResponse;
     },
     editPerson: async (personId, data) => {
-        const response = await fetch(`${API_BASE_URL}/updatePerson/${personId}`, {
+        const response = await fetch(`${API_BASE_URL}/persons/updatePerson/${personId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -47,17 +48,45 @@ const apiService = {
         return response.json();
     },
     fetchPersons: async () => {
-        const response = await fetch(`${API_BASE_URL}/getPersons`);
+        const response = await fetch(`${API_BASE_URL}/persons/getPersons`);
         return response.json();
     },
+    //для DashboardPage
     countPersons: async () => {
-        const response = await fetch(`${API_BASE_URL}/countPersons`);
+        const response = await fetch(`${API_BASE_URL}/persons/countPersons`);
         return response.json();
     },
     countPersonsInactiveSinceMonths: async (months) => {
-        const response = await fetch(`${API_BASE_URL}/countPersonsInactiveSinceMonths/${months}`);
+        const response = await fetch(`${API_BASE_URL}/persons/countPersonsInactiveSinceMonths/${months}`);
         return response.json();
-    }
+    },
+    //для SettingsPage
+    getUsers: async () => {
+        const response = await fetch(`${API_BASE_URL}/users/getUsers`);
+        if (!response.ok) {
+            throw new Error(`Ошибка запроса: ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+    },
+    deleteUser: async (userId) => {
+        console.log("Requesting deletion for userId:", userId);
+        const response = await fetch(`${API_BASE_URL}/users/deleteUser/${userId}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error("Пользователь не найден");
+            }
+            throw new Error(`Ошибка удаления пользователя: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.text(); // получаем текстовый ответ
+        if (data) {
+            return JSON.parse(data); // или используем json(), если ответ действительно JSON
+        } else {
+            return {}; // В случае пустого ответа возвращаем пустой объект
+        }
+    },
 };
 
 export default apiService;

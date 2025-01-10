@@ -2,7 +2,7 @@ import React , { useRef } from 'react';
 import { sections } from './data';
 import styles from "./TextWithTOC.module.scss"
 import { Stack } from '../../../../shared/ui/Stack/Stack';
-import { Button } from '../../../../shared/ui/ButtonsPages/Button';
+import { ActionButton } from '../../../../shared/ui/Buttons/ActionButton';
 
 const TextWithTOC = () => {
     const titleRef = useRef(null); // Создаем реф для заголовка
@@ -38,12 +38,12 @@ const TextWithTOC = () => {
             </div>
 
             <Stack className={styles.up}>
-                <Button 
+                <ActionButton 
                     variant="blue"
                     onClick={scrollToTitle} // Используем функцию для скролла
                 >
                     Up
-                </Button>
+                </ActionButton>
             </Stack>
         </Stack>
     );
