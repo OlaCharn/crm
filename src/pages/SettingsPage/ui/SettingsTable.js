@@ -48,7 +48,7 @@ export const SettingsTable = () => {
                 setData(fetchedData);                                    // Устанавливаем данные
                 setError(null);                                          // Сбрасываем ошибку, если загрузка прошла успешно
             } catch (err) {
-                console.error("Ошибка загрузки данных:", err.message);
+                //console.error("Ошибка загрузки данных:", err.message);
                 setError("Не удалось загрузить данные");                 // Устанавливаем текст ошибки
                 setData([]);                                             // Очищаем данные, если произошла ошибка
             } finally {
@@ -61,11 +61,9 @@ export const SettingsTable = () => {
     //функция для кнопки deletePerson
     const handleDeleteClick = async () => {
         if (!selectedRow) return; 
-        console.log("Attempting to delete user with ID:", selectedRow._id);
+        //console.log("Attempting to delete user with ID:", selectedRow._id);
         try {
-            console.log("Deleting user ID:", selectedRow._id); // Debugging ID
             await apiService.deleteUser(selectedRow._id); 
-            console.log(`User with ID ${selectedRow._id} deleted successfully`);
             const fetchedData = await apiService.getUsers();
             setData(fetchedData); 
             handleCloseModal(); 
@@ -91,9 +89,9 @@ export const SettingsTable = () => {
     };
 
     //функция для кнопки Add
-    const handleAddPerson = async (data) => {
+    const handleRegisterUser = async (data) => {
         try {
-            const jsonResponse = await apiService.addPerson(data);                         // Получаем данные от сервера
+            const jsonResponse = await apiService.registerUser(data);                         // Получаем данные от сервера
             setData((prevData) => [...prevData, jsonResponse]);                            // Обновляем локальный список, добавляя полученные с сервера данные
             handleCloseModal(); 
         } catch (error) {
@@ -200,13 +198,13 @@ export const SettingsTable = () => {
                         variant="green"
                         onClick={() => handleOpenModal(
                             <AddForm 
-                                onSubmit={handleAddPerson} 
+                                onSubmit={handleRegisterUser} 
                                 closeModal={handleCloseModal}
                             />,
-                            "Add Person" // Функция handleOpenModal ожидает два параметра . Без второго аргумента title остаётся undefined.
+                            "Register User" // Функция handleOpenModal ожидает два параметра . Без второго аргумента title остаётся undefined.
                         )}
                     >
-                        Add
+                        Register
                     </ActionButton>
                     <ActionButton
                         variant="green"
@@ -218,7 +216,7 @@ export const SettingsTable = () => {
                                             onSubmit={handleEditSubmit} 
                                             closeModal={handleCloseModal}
                                         />,
-                                        "Edit Person"
+                                        "Edit User"
                                     )     
                                         : handleOpenModal(
                                         <MessageForm  
@@ -237,7 +235,7 @@ export const SettingsTable = () => {
                                             onDelete={handleDeleteClick} 
                                             onCancel={handleCloseModal} 
                                         />,
-                                        "Delete Person"
+                                        "Delete User"
                                     ) 
                                         : handleOpenModal(
                                         <MessageForm 
@@ -248,7 +246,7 @@ export const SettingsTable = () => {
                     </ActionButton>
                 </Stack>
                 
-<div className={styles.wrapper}>
+        <div className={styles.wrapper}>
             <div className={styles.tableContainer}>
             <table >
                 <thead>
@@ -264,7 +262,6 @@ export const SettingsTable = () => {
                                     header.column.columnDef.header,
                                     header.getContext()
                                     )}
-                                    {header.column.id !== "address" && header.column.id !== "notes" && (
                                     <Stack direction="column">
                                         <ArrowUp 
                                             onClick={() => handleSort(header.column.id, false)}
@@ -276,7 +273,6 @@ export const SettingsTable = () => {
                                             isActive={activeSortColumn === header.column.id && sorting[0]?.desc === true}
                                         />
                                     </Stack>
-                                )}
                                 </Stack>
                             </th>
                         ))}

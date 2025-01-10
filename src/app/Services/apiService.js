@@ -87,6 +87,20 @@ const apiService = {
             return {}; // В случае пустого ответа возвращаем пустой объект
         }
     },
+    registerUser: async (data) => {
+        const response = await fetch(`${API_BASE_URL}/users/registerUser`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            throw new Error('Server error: ' + response.statusText);
+        }
+        const jsonResponse = await response.json();
+        console.log(jsonResponse)
+        return jsonResponse;
+    },
+
 };
 
 export default apiService;
