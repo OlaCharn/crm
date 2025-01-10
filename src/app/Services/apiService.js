@@ -69,7 +69,6 @@ const apiService = {
         return response.json();
     },
     deleteUser: async (userId) => {
-        console.log("Requesting deletion for userId:", userId);
         const response = await fetch(`${API_BASE_URL}/users/deleteUser/${userId}`, {
             method: "DELETE",
         });
@@ -88,18 +87,38 @@ const apiService = {
         }
     },
     registerUser: async (data) => {
-        const response = await fetch(`${API_BASE_URL}/users/registerUser`, {
+        try {
+            const response = await fetch(`${API_BASE_URL}/users/registerUser`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+    
+            if (!response.ok) {
+                if (response.status === 409) {
+                    const error = new Error('User already exists'); // Создаем ошибку с сообщением
+                    error.code = 409; // Добавляем свойство для кода ошибки
+                    throw error; // Выбрасываем ошибку
+                }
+                throw new Error('Server error: ' + response.statusText);
+            }
+    
+            const jsonResponse = await response.json();
+            console.log(jsonResponse);
+            return jsonResponse;
+        } catch (error) {
+            console.error(error);
+            throw error; // Пробрасываем ошибку наверх
+        }
+    },
+    updateUser: async (userId, data) => {
+        const response = await fetch(`${API_BASE_URL}/users/updateUser/${userId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         });
-        if (!response.ok) {
-            throw new Error('Server error: ' + response.statusText);
-        }
-        const jsonResponse = await response.json();
-        console.log(jsonResponse)
-        return jsonResponse;
-    },
+        return response.json();
+    }, 
 
 };
 

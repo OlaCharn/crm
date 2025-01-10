@@ -1,289 +1,108 @@
-import { useForm, useFieldArray } from "react-hook-form";
-import { BsTrash, BsPlusLg } from "react-icons/bs";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Stack } from "../../../shared/ui/Stack/Stack";
 import styles from "./Form.module.scss"
+import { PiEye } from "react-icons/pi";
+import { PiEyeClosed } from "react-icons/pi";
 
-export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
+
+export const EditForm = ({ selectedRow, onSubmit, closeModal }) => {
+    const [showPassword, setShowPassword] = useState(false); // Стейт для видимости пароля
+
     const {
         register,
         handleSubmit,
-        control,
         reset,
         formState: { errors },
     } = useForm({
         defaultValues: {
-            first_name: selectedRow?.first_name || "",
-            last_name: selectedRow?.last_name || "",
-            address: selectedRow?.address || "",
-            birth_date: selectedRow?.birth_date || "",
-            preferred_contact_by: selectedRow?.preferred_contact_by || "",
-            intern_extern: selectedRow?.intern_extern || "",
-            notes: selectedRow?.notes || "",
-            phones: selectedRow?.phones || [{ phone: "", notes: "" }],
-            emails: selectedRow?.emails || [{ email: "", notes: "" }],
-            contacts: selectedRow?.contacts || [{ contact_date: "", contact_by: "", contact_notes: "" }],
-            participations: selectedRow?.participations || [{ participation_date: "", participation_place: "", participation_notes: "" }],
+            name: selectedRow?.name || "",
+            email: selectedRow?.email || "",
+            password: selectedRow?.password || "",
+            role: selectedRow?.role || "viewer", // По умолчанию устанавливаем "viewer"
         },
-    });
-
-    const { fields: phoneFields, append: appendPhone, remove: removePhone } = useFieldArray({
-        control,
-        name: "phones",
-    });
-
-    const { fields: emailFields, append: appendEmail, remove: removeEmail } = useFieldArray({
-        control,
-        name: "emails",
-    });
-
-    const { fields: contactFields, append: appendContact, remove: removeContact } = useFieldArray({
-        control,
-        name: "contacts",
-    });
-
-    const {
-        fields: participationFields,
-        append: appendParticipation,
-        remove: removeParticipation,
-    } = useFieldArray({
-        control,
-        name: "participations",
     });
 
     const submitForm = (data) => {
         console.log("Updated Data:", data);
         reset();
-        onSubmit(data); // Call the onSubmit prop to update data
+        onSubmit(data); // Call the onSubmit prop for the updated data
     };
 
     return (
         <form onSubmit={handleSubmit(submitForm)}>
-            <Stack direction="column" gap={8} align="alignStart">               
-                {/* First Name */}
+            <Stack direction="column" gap={8} align="alignStart">
+                
+                {/* Name */}
                 <Stack direction="row" gap={8} align="alignCenter" justify="justifyBetween" max>
-                    <label className={styles.label}>First Name:</label>
+                    <label className={styles.label}>Name:</label>
                     <div className={styles.inputWrapper}>
                         <input
                             className={styles.input}
-                            {...register("first_name", { required: "First Name is required" })}
+                            {...register("name", { required: "Name is required" })}
                         />
-                        {errors.first_name && (
-                            <span className={styles.errorMessage}>{errors.first_name.message}</span>
-                        )}
+                        {errors.name && <span className={styles.errorMessage}>{errors.name.message}</span>}
                     </div>
                 </Stack>
 
-                {/* Last Name */}
+                {/* Email */}
+                <Stack direction="row" gap={8} align="alignCenter" justify="justifyBetween" max>
+                    <label className={styles.label}>Email:</label>
+                    <div className={styles.inputWrapper}>
+                        <input
+                            className={styles.input}
+                            type="email"
+                            {...register("email", {
+                                required: "Email is required", 
+                                pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                    message: "Invalid email format",
+                                },
+                            })}
+                        />
+                        {errors.email && <span className={styles.errorMessage}>{errors.email.message}</span>}
+                    </div>
+                </Stack>
+
+                {/* Password */}
                 <Stack direction="row" gap={8} align="alignCenter" max justify="justifyBetween">
-                    <label className={styles.label}>Last Name:</label>
+                    <label className={styles.label}>Password:</label>
                     <div className={styles.inputWrapper}>
                         <input
                             className={styles.input}
-                            {...register("last_name", { required: "Last Name is required" })}
+                            type={showPassword ? "text" : "password"} // Toggle for password visibility
+                            {...register("password")}
                         />
-                        {errors.last_name && (
-                            <span className={styles.errorMessage}>{errors.last_name.message}</span>
-                        )}
-                    </div>
-                </Stack>
-
-                {/* Address */}
-                <Stack max justify="justifyBetween">
-                    <label className={styles.label}>Address:</label>
-                    <input className={styles.input} {...register("address", { required: false })} />
-                </Stack>
-
-                {/* Birth Date */}
-                <Stack direction="row" gap={8} align="alignCenter" max justify="justifyStart">
-                    <label className={`${styles.label} ${styles.birthMargin}`}>Birth Date:</label>
-                    <div className={styles.inputWrapper}>
-                        <input
-                            className={styles.inputDate}
-                            type="date"
-                            {...register("birth_date", { required: "Birth Date is required" })}
-                        />
-                        {errors.birth_date && (
-                            <span className={styles.errorMessage}>{errors.birth_date.message}</span>
-                        )}
-                    </div>
-                </Stack>
-
-                {/* Phones */}
-                <Stack direction="column" gap={8} align="alignStart" max>
-                    <label className={styles.label}>Phones:</label>
-                    <Stack direction="column" gap={8} max>
-                        {phoneFields.map((field, index) => (
-                            <Stack key={field.id} gap={8} direction="row" align="alignCenter" max>
-                                <input
-                                    {...register(`phones.${index}.phone`, { required: false })}
-                                    placeholder="Phone Number"
-                                    className={styles.inputSmall}
-                                />
-                                <input
-                                    {...register(`phones.${index}.notes`)}
-                                    placeholder="Notes"
-                                    className={styles.inputSmall}
-                                />
-                                <button type="button" className={styles.removeButton} onClick={() => removePhone(index)}>
-                                    <BsTrash />
-                                </button>
-                            </Stack>
-                        ))}
-                    </Stack>
-                    <button type="button" className={styles.addButton} onClick={() => appendPhone({ phone: "", notes: "" })}>
-                        <BsPlusLg />
-                    </button>
-                </Stack>
-
-                {/* Emails */}
-                <Stack direction="column" gap={8} align="alignStart" max>
-                    <label className={styles.label}>Emails:</label>
-                    <Stack direction="column" gap={8} max>
-                        {emailFields.map((field, index) => (
-                            <Stack key={field.id} gap={8} direction="row" align="alignCenter" max>
-                                <input
-                                    {...register(`emails.${index}.email`, { required: false })}
-                                    placeholder="Email Address"
-                                    className={styles.inputSmall}
-                                />
-                                <input
-                                    {...register(`emails.${index}.notes`)}
-                                    placeholder="Notes"
-                                    className={styles.inputSmall}
-                                />
-                                <button type="button" className={styles.removeButton} onClick={() => removeEmail(index)}>
-                                    <BsTrash />
-                                </button>
-                            </Stack>
-                        ))}
-                    </Stack>
-                    <button type="button" className={styles.addButton} onClick={() => appendEmail({ email: "", notes: "" })}>
-                        <BsPlusLg />
-                    </button>
-                </Stack>
-
-                {/* Preferred Contact */}
-                <Stack gap={16} max justify="justifyStart">
-                    <label className={styles.label}>Preferred Contact By:</label>
-                    <Stack gap={8}>
-                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
-                            <input type="radio" value="email" {...register("preferred_contact_by", { required: false })} />
-                            Email
-                        </label>
-                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
-                            <input type="radio" value="phone" {...register("preferred_contact_by", { required: false })} />
-                            Phone
-                        </label>
-                    </Stack>
-                </Stack>
-
-                {/* int/ext */}
-                <Stack gap={32} max justify="justifyStart">
-                    <label className={styles.label}>Internal/External:</label>
-                    <Stack gap={16} >
-                        <label className={`${styles.radioLabel} ${styles.birthMargin}`} >
-                            <input type="radio" value="int" {...register("intern_extern", { required: false })} /> Intern
-                        </label>
-                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
-                            <input type="radio" value="ext" {...register("intern_extern", { required: false })} /> Extern
-                        </label>
-                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
-                            <input type="radio" value="ex-int" {...register("intern_extern", { required: false })} /> Ex-Intern
-                        </label>
+                        {errors.password && <span className={styles.errorMessage}>Password is required</span>}
                         
-                    </Stack>
-                    {errors.intern_extern && <span>This field is required</span>}
-                </Stack>
-                
-                <Stack gap={4} max justify="justifyBetween">
-                    <label className={styles.label} >Notes:</label>
-                    <textarea className={styles.textarea} {...register("notes")} placeholder="Notes" />
-                </Stack>
-                
-                <Stack gap={4} max justify="justifyBetween">
-                    <label className={styles.label}>Participation Place:</label>
-                    <input className={styles.input} {...register("participation_place", { required: false })} />
-                </Stack>
-                
-
-                <Stack direction="column" gap={8} align="alignStart" max>
-                    <label className={styles.label}>Contacts:</label>
-                    <Stack direction="column" gap={8} max>
-                        {contactFields.map((field, index) => (
-                            <Stack key={field.id} gap={8} direction="row" align="alignCenter" max>
-                                <input
-                                    type="date"
-                                    defaultValue={field.contact_date}
-                                    {...register(`contacts.${index}.contact_date`, { required: false })}
-                                    placeholder="Contact Date"
-                                    className={styles.inputSmall}
-                                />
-                                <input
-                                    defaultValue={field.contact_by}
-                                    {...register(`contacts.${index}.contact_by`)}
-                                    placeholder="Contact By"
-                                    className={styles.inputSmall}
-                                />
-                                <input
-                                    defaultValue={field.contact_notes}
-                                    {...register(`contacts.${index}.contact_notes`)}
-                                    placeholder="Notes"
-                                    className={styles.inputSmall}
-                                />
-                                <button
-                                    type="button"
-                                    className={styles.removeButton}
-                                    onClick={() => removeContact(index)}
-                                >
-                                    <BsTrash />
-                                </button>
-                            </Stack>
-                        ))}
-                    </Stack>
-                    <button
-                        type="button"
-                        className={styles.addButton}
-                        onClick={() =>
-                            appendContact({ contact_date: "", contact_by: "", contact_notes: "" })
-                        }
-                    >
-                        <BsPlusLg />
-                    </button>
-                </Stack>
-
-
-                <Stack direction="column" gap={8} align="alignStart" max>
-                    <label className={styles.label}>Participations:</label>
-                    <Stack direction="column" gap={8} max>
-                    {participationFields.map((field, index) => (
-                        <Stack key={field.id} gap={8} direction="row" align="alignCenter" max>
-                            <input
-                                type="date"
-                                {...register(`participations.${index}.participation_date`, { required: false })}
-                                placeholder="Participation Date"
-                                className={styles.inputSmall}
-                            />
-                            <input
-                                {...register(`participations.${index}.participation_place`)}
-                                placeholder="Participation Place"
-                                className={styles.inputSmall}
-                            />
-                            <input
-                                {...register(`participations.${index}.participation_notes`)}
-                                placeholder="Notes"
-                                className={styles.inputSmall}
-                            />
-                            <button className={styles.removeButton} type="button" onClick={() => removeParticipation(index)}>
-                                <BsTrash />
+                        <div className={styles.toggleButtonWrapper}>
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(prev => !prev)}
+                                className={styles.toggleButton}
+                            >
+                                {showPassword ? <PiEyeClosed /> : <PiEye />}
                             </button>
-                        </Stack>
-                    ))}
-                    </Stack>
-                    <button type="button"  className={styles.addButton} onClick={() => appendParticipation({ participation_date: "", participation_place: "", participation_notes: "" })}>
-                    <BsPlusLg />
-                    </button>
+                        </div>
+                    </div>
                 </Stack>
-                
+
+                {/* Role Selection */}
+                <Stack gap={32} max justify="justifyStart">
+                    <label className={styles.label}>Role:</label>
+                    <Stack gap={16}>
+                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
+                            <input type="radio" value="viewer" {...register("role", { required: true })} /> viewer
+                        </label>
+                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
+                            <input type="radio" value="editor" {...register("role", { required: true })} /> editor
+                        </label>
+                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
+                            <input type="radio" value="admin" {...register("role", { required: true })} /> admin
+                        </label>
+                    </Stack>
+                    {errors.role && <span className={styles.errorMessage}>Please select a role.</span>}
+                </Stack>
 
                 <Stack gap={16} justify="justifyEnd" align="alignCenter">
                     <button type="submit" className={styles.button}>
@@ -297,52 +116,3 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
         </form>
     );
 };
-
-/*
-export const EditForm = ({ selectedRow, onSubmit }) => {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const updatedData = {
-            first_name: formData.get("first_name"),
-            last_name: formData.get("last_name"),
-            birth_date: formData.get("birth_date")
-        };
-        onSubmit(updatedData); // Обработчик обновления данных
-    };
-
-    return (
-        <>
-            <h4>Edit Person</h4>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    First Name:
-                    <input
-                        name="first_name"
-                        type="text"
-                        defaultValue={selectedRow?.first_name || ""}
-                    />
-                </label>
-                <label>
-                    Last Name:
-                    <input
-                        name="last_name"
-                        type="text"
-                        defaultValue={selectedRow?.last_name || ""}
-                    />
-                </label>
-                <label>
-                    Date of birth:
-                    <input
-                        name="birth_date"
-                        type="text"
-                        defaultValue={selectedRow?.birth_date }
-                    />
-                </label>
-
-                <button type="submit">Save Changes</button>
-            </form>
-        </>
-    );
-};
-*/

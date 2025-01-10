@@ -75,8 +75,8 @@ export const SettingsTable = () => {
     //функция для кнопки Edit
     const handleEditSubmit = async (updatedData) => {
         try {
-            await apiService.editPerson(selectedRow._id, updatedData);                      // Обновляем данные через API
-            const fetchedData = await apiService.fetchPersons();                            // Получаем обновленные данные из API
+            await apiService.updateUser(selectedRow._id, updatedData);                      // Обновляем данные через API
+            const fetchedData = await apiService.getUsers();                            // Получаем обновленные данные из API
             setData(fetchedData);                                                           // Обновление таблицы
             const updatedRow = fetchedData.find(person => person._id === selectedRow._id);  // Находим обновленный объект в данных
             if (updatedRow) {
@@ -92,6 +92,11 @@ export const SettingsTable = () => {
     const handleRegisterUser = async (data) => {
         try {
             const jsonResponse = await apiService.registerUser(data);                         // Получаем данные от сервера
+            if (jsonResponse.error && jsonResponse.error.code === 409) {
+                // Если ошибка 409, то значит такой юзер уже существует
+                alert("User already exists. Please choose a different name.");
+                return; // Прерываем выполнение функции
+            }
             setData((prevData) => [...prevData, jsonResponse]);                            // Обновляем локальный список, добавляя полученные с сервера данные
             handleCloseModal(); 
         } catch (error) {
@@ -117,11 +122,7 @@ export const SettingsTable = () => {
     const handleRowClick = (row) => {
         setSelectedRow(row.original);  // Используем `row.original` для получения данных строки
     };
-
-
-
-
-
+    
     const columns = useMemo(
         () => [
             columnHelper.accessor("name", {

@@ -66,9 +66,9 @@
 }
 .toggleButtonWrapper {
     display: flex;      /* Для того чтобы кнопка располагалась по горизонтали */
-    justify-content: flex-end; /* Кнопка будет справа */
+    justify-content: flex-end; 
     position: absolute;
-    right: 10px;  /* Расположим кнопку справа от поля ввода */
+    right: 10px;  
     top: 5px;
 }
 
@@ -77,8 +77,8 @@
     border: none;
     cursor: pointer;
     padding: 0;
-    font-size: 20px;
-    color: var(--text-color-accent-pink); /* Подберите нужный цвет */
+    font-size: var(--font-size-large);
+    color: var(--text-color-accent-pink); 
 }
 .button {
     font-family: var(--font-main-bold);
