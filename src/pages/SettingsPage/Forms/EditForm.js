@@ -24,7 +24,7 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal }) => {
     });
 
     const submitForm = (data) => {
-        console.log("Updated Data:", data);
+        //console.log("Updated Data:", data);
         reset();
         onSubmit(data); // Call the onSubmit prop for the updated data
     };
@@ -66,11 +66,12 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal }) => {
 
                 {/* Password */}
                 <Stack direction="row" gap={8} align="alignCenter" max justify="justifyBetween">
-                    <label className={styles.label}>Password:</label>
+                    <label className={styles.label}>New password:</label>
                     <div className={styles.inputWrapper}>
                         <input
                             className={styles.input}
                             type={showPassword ? "text" : "password"} // Toggle for password visibility
+                            placeholder="If you leave the password field empty, your password is not going to be changed. "
                             {...register("password")}
                         />
                         {errors.password && <span className={styles.errorMessage}>Password is required</span>}

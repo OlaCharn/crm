@@ -19,6 +19,7 @@ import { AddForm } from "../Forms/AddForm.js";
 import { EditForm } from "../Forms/EditForm.js";
 import { DeleteForm } from "../Forms/DeleteForm.js";
 import { MessageForm } from "../Forms/MessageForm.js";
+import { RingLoaderComponent } from "../../../shared/ui/Loader/RingLoaderComponent.js";
 
 
 export const SettingsTable = () => {
@@ -49,7 +50,7 @@ export const SettingsTable = () => {
                 setError(null);                                          // Сбрасываем ошибку, если загрузка прошла успешно
             } catch (err) {
                 //console.error("Ошибка загрузки данных:", err.message);
-                setError("Не удалось загрузить данные");                 // Устанавливаем текст ошибки
+                setError("No data available");                 // Устанавливаем текст ошибки
                 setData([]);                                             // Очищаем данные, если произошла ошибка
             } finally {
                 setIsLoading(false);                                     // Сбрасываем индикатор загрузки в любом случае
@@ -159,10 +160,6 @@ export const SettingsTable = () => {
     });
 
 
-    if (!data || data.length === 0) {
-        return <div>No data available</div>; // Если данных нет
-    }
-
     // Проверяем, есть ли отфильтрованные строки
     const filteredRows = table.getRowModel()?.rows;               // Получаем отфильтрованные строки
     const noMatches = filteredRows && filteredRows.length === 0;  // Если строк нет, устанавливаем флаг noMatches
@@ -175,13 +172,18 @@ export const SettingsTable = () => {
 
     // Если данные загружаются, показываем "Loading..."
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div> <RingLoaderComponent /> </div>;
     }
 
     // Если произошла ошибка, показываем сообщение об ошибке
     if (error) {
         return <div>Error: {error}</div>;
     }
+    if (!data || data.length === 0) {
+        return <div>No data available</div>; // Если данных нет
+    }
+
+
     
     return (
         <> 

@@ -95,8 +95,7 @@ const apiService = {
             });
             if (!response.ok) {
                 if (response.status === 409) {
-                    // Возвращаем ошибку с кодом 409, если пользователь уже существует
-                    const error = new Error('User already exists');
+                    const error = new Error('User already exists');  // Возвращаем ошибку с кодом 409, если пользователь уже существует
                     error.code = 409;
                     throw error; // Выбрасываем ошибку
                 }

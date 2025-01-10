@@ -61,7 +61,7 @@ export const AddForm = ({ onSubmit , closeModal }) => {
                 </Stack>
 
                 <Stack direction="row" max justify="justifyBetween" align="alignCenter">
-                    <label className={styles.label}>Password:</label>
+                    <label className={styles.label}>New password:</label>
                     <div className={styles.inputWrapper}>
                         <input 
                             className={styles.input}

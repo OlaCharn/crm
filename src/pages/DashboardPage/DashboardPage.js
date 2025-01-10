@@ -4,6 +4,7 @@ import { BoxWhiteBackground } from "../../shared/ui/BoxWhiteBackground/BoxWhiteB
 import apiService from "../../app/Services/apiService";
 import { Stack } from "../../shared/ui/Stack/Stack";
 import styles from "./Dashboard.module.scss"
+import { RingLoaderComponent } from "../../shared/ui/Loader/RingLoaderComponent";
 //import { ActionButton } from "../BrowsePage/ui/Buttons/ActionButton";
 
 const DashboardPage = () => {
@@ -23,7 +24,7 @@ const DashboardPage = () => {
                 setError(null);
             } catch (err) {
                 console.error("Ошибка загрузки данных:", err.message);
-                setError("Не удалось загрузить данные");
+                setError("No data available");
                 setCount(null);
             } finally {
                 setIsLoading(false);
@@ -43,7 +44,7 @@ const DashboardPage = () => {
             setError(null);
         } catch (err) {
             console.error("Ошибка загрузки данных:", err.message);
-            setError("Не удалось загрузить данные");
+            setError("No data available");
             setInactiveCount(null);
         } finally {
             setIsLoading(false);
@@ -51,7 +52,7 @@ const DashboardPage = () => {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div> <RingLoaderComponent /> </div>;
     }
     if (error) {
         return <div>Error: {error}</div>;
