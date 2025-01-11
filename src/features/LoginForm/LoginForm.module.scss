@@ -1,0 +1,103 @@
+
+.label {
+    font-family: var(--font-main-bold);
+    font-size: var(--font-size-medium);
+    color: var(--text-color);
+}
+
+.input,
+.select,
+.textarea {
+    font-family: var(--font-main-regular);
+    font-size: var(--font-size-medium);
+    padding: 5px;
+    border: 1px solid var(--text-color-inactive);
+    border-radius: var(--border-radius-s);
+    //width: 470px;
+    min-width: 650px;
+    width: auto;
+    transition: border-color 0.3s;
+}
+.inputDate{
+    font-family: var(--font-main-regular);
+    font-size: var(--font-size-medium);
+    padding: 5px;
+    border: 1px solid var(--text-color-inactive);
+    border-radius: var(--border-radius-s);
+    transition: border-color 0.3s;
+    width: auto;
+
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus,
+.inputSmall:focus,
+.inputDate:focus {
+    border-color: var(--text-color-accent-blue);
+    outline: none;
+}
+
+.errorMessage {
+    font-family: var(--font-main-regular);
+    font-size: var(--font-size-small);
+    color: var(--text-color-accent-pink);
+    margin-top: 4px;
+}
+.inputWrapper {
+    display: flex;
+    flex-direction: column; /* Поле ввода сверху, сообщение об ошибке снизу */
+    position: relative; /* Для стабильного позиционирования */
+}
+
+.button {
+    font-family: var(--font-main-bold);
+    font-size: var(--font-size-medium);
+    padding: 10px 20px;
+    background-color: var(--text-color-accent-green);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-m);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: var(--text-color-accent-blue);
+
+}
+
+.toggleButtonWrapper {
+    display: flex;      /* Для того чтобы кнопка располагалась по горизонтали */
+    justify-content: flex-end; 
+    position: absolute;
+    right: 10px;  
+    top: 5px;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: var(--font-size-large);
+    color: var(--text-color-accent-pink); 
+}
+
+
+.cancelButton{
+    font-family: var(--font-main-bold);
+    font-size: var(--font-size-medium);
+    padding: 10px 20px;
+    background-color: var(--text-color-inactive);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-m);
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+}
+.cancelButton:hover {
+    background-color: var(--text-color-accent-blue);
+
+}

@@ -260,6 +260,7 @@ export const AddForm = ({ onSubmit , closeModal }) => {
                 <BsPlusLg />
                 </button>
             </Stack>
+            
             <Stack gap={16} justify="justifyEnd" align="alignCenter" >
                 <button type="submit" className={styles.button}>
                     Add

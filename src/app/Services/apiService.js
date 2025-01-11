@@ -116,6 +116,63 @@ const apiService = {
         });
         return response.json();
     }, 
+    loginUser: async (username, password) => {
+            try {
+            console.log("!!!!!!")
+            const response = await fetch(`${API_BASE_URL}/users/loginUser`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ "name": username, "password": password }),
+            });
+    
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Incorrect credentials');  // Ошибка, если неверный логин/пароль
+                }
+                throw new Error('Server error: ' + response.statusText);  // Ошибка сервера
+            }
+    
+            // Если запрос успешен, получаем токен
+            const data = await response.json();
+            console.log("Response from server:", data);  // Логирование полученного ответа от сервера
+    
+            // Сохраняем токен в localStorage
+            if (data.token) {
+                localStorage.setItem("authToken", data.token);
+            }
+    
+            // Возвращаем данные с токеном
+            return data;
+        } catch (error) {
+            console.error(error);
+            throw error;  // Пробрасываем ошибку наверх
+        }
+    }, 
+    logoutUser: async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/users/logoutUser`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                // Дополнительные параметры, если требуется (например, токен для выхода)
+                body: JSON.stringify({
+                    token: localStorage.getItem("authToken") // Отправляем токен на сервер
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Ошибка при логауте');
+            }
+    
+            // Если логаут успешен, очищаем токен из localStorage
+            localStorage.removeItem("authToken");
+    
+            // Возвращаем успешный ответ
+            return { success: true };
+        } catch (error) {
+            console.error("Ошибка логаута", error);
+            throw error;
+        }
+    },
 
 };
 
