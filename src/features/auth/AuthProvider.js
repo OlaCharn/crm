@@ -13,10 +13,10 @@ export const AuthProvider = ({ children }) => {
             const data = await apiService.loginUser(username, password); // Вызываем apiService
             console.log('Login successful:', data); // Логируем ответ от сервера
             if (data.token) {
-                setUser(data.user);
+                setUser(data.name);
                 setRole(data.role);
                 localStorage.setItem('authToken', data.token); // Сохраняем токен
-                console.log('User logged in:', data.user);
+                console.log('User logged in:', data.name);
             } else {
                 throw new Error('Login failed');
             }

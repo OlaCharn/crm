@@ -118,11 +118,11 @@ const apiService = {
     }, 
     loginUser: async (username, password) => {
             try {
-            console.log("!!!!!!")
+            console.log("api loginUser")
             const response = await fetch(`${API_BASE_URL}/users/loginUser`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "name": username, "password": password }),
+                body: JSON.stringify({ "name": username, "password": password, "role": role }),
             });
     
             if (!response.ok) {
