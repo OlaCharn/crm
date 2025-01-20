@@ -3,20 +3,23 @@ import styles from "./ActionButton.module.scss";
 
 export const ActionButton = ({
     children,
-    variant, // 'green' или 'blue'
-    onClick,   // Функция для обработки клика, которая будет вызываться при нажатии на кнопку
-    action,    // Тип действия: 'add', 'delete', 'edit'
-    dataType,  // Тип данных, например 'person', 'info' или другой
+    variant, // 'green' / 'blue'
+    onClick,   
+    action,    // 'add', 'delete', 'edit'
+    dataType,  
     className,
+    disabled,
     ...otherProps
 }) => {
     const classes = getStyles(styles.button, {}, [
         className,
-        styles[variant], // Используем `styles.green` или `styles.blue`
+        styles[variant], // `styles.green` / `styles.blue`
+        disabled ? 'disabled' : ''
     ]);
     const handleClick = () => {
-        // Передаем action и dataType, а также onClick с требуемым действием
-        onClick(action, dataType); 
+        if (!disabled) {
+            onClick(action, dataType); // disabled
+        }
     };
 
     return (
@@ -24,6 +27,7 @@ export const ActionButton = ({
         action="scroll"
             className={classes}
             onClick={handleClick}
+            disabled={disabled}
             {...otherProps}>
                 {children}
         </button>

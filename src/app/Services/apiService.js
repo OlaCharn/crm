@@ -7,7 +7,7 @@ const API_BASE_URL = `http://${BACKEND_HOST}:${BACKEND_PORT}/api`;
 
 
 const apiService = {
-    //для BrowsePage
+    //BrowsePage
     deletePerson: async (personId) => {
         console.log(personId)
         const response = await fetch(`${API_BASE_URL}/persons/deletePerson/${personId}`, {
@@ -15,15 +15,14 @@ const apiService = {
         });
 
         if (!response.ok) {
-            throw new Error("Ошибка удаления записи");
+            throw new Error("Deleting Error");
         }
 
-        // Проверяем, возвращает ли ответ что-то
-        const data = await response.text(); // получаем текстовый ответ
+        const data = await response.text(); 
         if (data) {
-            return JSON.parse(data); // или используем json(), если ответ действительно JSON
+            return JSON.parse(data); 
         } else {
-            return {}; // В случае пустого ответа возвращаем пустой объект
+            return {}; 
         }
     },
     addPerson: async (data) => {
@@ -51,7 +50,7 @@ const apiService = {
         const response = await fetch(`${API_BASE_URL}/persons/getPersons`);
         return response.json();
     },
-    //для DashboardPage
+    //DashboardPage
     countPersons: async () => {
         const response = await fetch(`${API_BASE_URL}/persons/countPersons`);
         return response.json();
@@ -60,11 +59,11 @@ const apiService = {
         const response = await fetch(`${API_BASE_URL}/persons/countPersonsInactiveSinceMonths/${months}`);
         return response.json();
     },
-    //для SettingsPage
+    //SettingsPage
     getUsers: async () => {
         const response = await fetch(`${API_BASE_URL}/users/getUsers`);
         if (!response.ok) {
-            throw new Error(`Ошибка запроса: ${response.status} ${response.statusText}`);
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         return response.json();
     },
@@ -75,13 +74,13 @@ const apiService = {
 
         if (!response.ok) {
             if (response.status === 404) {
-                throw new Error("Пользователь не найден");
+                throw new Error("User is not found");
             }
-            throw new Error(`Ошибка удаления пользователя: ${response.status} ${response.statusText}`);
+            throw new Error(`Deleting Error: ${response.status} ${response.statusText}`);
         }
-        const data = await response.text(); // получаем текстовый ответ
+        const data = await response.text(); 
         if (data) {
-            return JSON.parse(data); // или используем json(), если ответ действительно JSON
+            return JSON.parse(data); 
         } else {
             return {}; 
         }
@@ -95,17 +94,17 @@ const apiService = {
             });
             if (!response.ok) {
                 if (response.status === 409) {
-                    const error = new Error('User already exists');  // Возвращаем ошибку с кодом 409, если пользователь уже существует
+                    const error = new Error('User already exists');  
                     error.code = 409;
-                    throw error; // Выбрасываем ошибку
+                    throw error; 
                 }
                 throw new Error('Server error: ' + response.statusText);
             }
             const jsonResponse = await response.json();
-            return jsonResponse; // Возвращаем данные в случае успеха
+            return jsonResponse; 
         } catch (error) {
-            console.error(error); // Логируем ошибку
-            throw error; // Пробрасываем ошибку наверх
+            console.error(error); 
+            throw error; 
         }
     },
     updateUser: async (userId, data) => {
@@ -118,58 +117,53 @@ const apiService = {
     }, 
     loginUser: async (username, password) => {
             try {
-            console.log("api loginUser")
+            
             const response = await fetch(`${API_BASE_URL}/users/loginUser`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "name": username, "password": password, "role": role }),
+                body: JSON.stringify({ "name": username, "password": password }),
             });
     
             if (!response.ok) {
                 if (response.status === 401) {
-                    throw new Error('Incorrect credentials');  // Ошибка, если неверный логин/пароль
+                    throw new Error('Incorrect credentials');  
                 }
-                throw new Error('Server error: ' + response.statusText);  // Ошибка сервера
+                throw new Error('Server error: ' + response.statusText);  
             }
     
-            // Если запрос успешен, получаем токен
             const data = await response.json();
-            console.log("Response from server:", data);  // Логирование полученного ответа от сервера
+            console.log("Response from server:", data);  
     
-            // Сохраняем токен в localStorage
+            // save token in localStorage
             if (data.token) {
                 localStorage.setItem("authToken", data.token);
             }
-    
-            // Возвращаем данные с токеном
+            // return data with token
             return data;
         } catch (error) {
             console.error(error);
-            throw error;  // Пробрасываем ошибку наверх
+            throw error;  
         }
     }, 
     logoutUser: async () => {
         try {
+            //console.log("api logout")
             const response = await fetch(`${API_BASE_URL}/users/logoutUser`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                // Дополнительные параметры, если требуется (например, токен для выхода)
+                // additional params, if needs (for example, exit token)
                 body: JSON.stringify({
-                    token: localStorage.getItem("authToken") // Отправляем токен на сервер
                 }),
             });
     
             if (!response.ok) {
-                throw new Error('Ошибка при логауте');
-            }
-    
-            // Если логаут успешен, очищаем токен из localStorage
+                throw new Error('Logout Error');
+            }   
             localStorage.removeItem("authToken");
     
-            // Возвращаем успешный ответ
             return { success: true };
         } catch (error) {
-            console.error("Ошибка логаута", error);
+            console.error("Logout Error", error);
             throw error;
         }
     },
@@ -178,37 +172,3 @@ const apiService = {
 
 export default apiService;
 
-/*
-
-для теста с ошибками
-
-editPerson: async (personId, data) => {
-    try {
-        console.log("Отправляемые данные:", JSON.stringify(data, null, 2));
-        console.log(`URL запроса: ${API_BASE_URL}/updatePerson/${personId}`);
-
-        const response = await fetch(`${API_BASE_URL}/updatePerson/${personId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        });
-
-        console.log("HTTP статус ответа:", response.status);
-        console.log("Заголовки ответа:", response.headers);
-
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json")) {
-            const jsonResponse = await response.json();
-            console.log("Ответ в формате JSON:", JSON.stringify(jsonResponse, null, 2));
-            return jsonResponse;
-        } else {
-            const textResponse = await response.text();
-            console.error("Ответ не является JSON:", textResponse);
-            throw new Error("Ответ от сервера не JSON");
-        }
-    } catch (err) {
-        console.error("Ошибка в editPerson:", err);
-        throw err; // Передаем ошибку для обработки вызывающим кодом
-    }
-},
-*/

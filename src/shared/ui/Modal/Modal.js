@@ -4,9 +4,9 @@ export const Modal = ({ title, children, onClose }) => {
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
-                {/* Заголовок с кнопкой закрытия */}
+                {/* header with close icon */}
                 <div className={styles.modalHeader}>
-                {title && <h3>{title}</h3>}  {/* Отображаем title, если он передан */}
+                {title && <h3>{title}</h3>}  
 
                     <button
                         onClick={onClose}
@@ -16,7 +16,7 @@ export const Modal = ({ title, children, onClose }) => {
                         &times;
                     </button>
                 </div>
-                {/* Основной контент */}
+                {/* main content */}
                 <div className={styles.modalBody}>{children}</div>
             </div>
         </div>

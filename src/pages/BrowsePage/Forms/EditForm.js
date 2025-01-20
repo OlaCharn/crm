@@ -16,6 +16,7 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
             last_name: selectedRow?.last_name || "",
             address: selectedRow?.address || "",
             birth_date: selectedRow?.birth_date || "",
+            gender: selectedRow?.gender || "",
             preferred_contact_by: selectedRow?.preferred_contact_by || "",
             intern_extern: selectedRow?.intern_extern || "",
             notes: selectedRow?.notes || "",
@@ -23,6 +24,7 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
             emails: selectedRow?.emails || [{ email: "", notes: "" }],
             contacts: selectedRow?.contacts || [{ contact_date: "", contact_by: "", contact_notes: "" }],
             participations: selectedRow?.participations || [{ participation_date: "", participation_place: "", participation_notes: "" }],
+            participation_place: selectedRow?.participation_place || "",
         },
     });
 
@@ -58,7 +60,8 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
 
     return (
         <form onSubmit={handleSubmit(submitForm)}>
-            <Stack direction="column" gap={8} align="alignStart">               
+            <Stack direction="column" gap={8} align="alignStart">   
+
                 {/* First Name */}
                 <Stack direction="row" gap={8} align="alignCenter" justify="justifyBetween" max>
                     <label className={styles.label}>First Name:</label>
@@ -107,6 +110,26 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
                         )}
                     </div>
                 </Stack>
+
+                {/*gender*/}
+
+                <Stack gap={32} max justify="justifyStart">
+                    <label className={styles.label}>Gender:</label>
+                    <Stack gap={16} >
+                        <label className={`${styles.radioLabel} ${styles.birthMargin}`} >
+                            <input type="radio" value="male" {...register("gender", { required: false })} /> male
+                        </label>
+                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
+                            <input type="radio" value="female" {...register("gender", { required: false })} /> female
+                        </label>
+                        <label className={`${styles.radioLabel} ${styles.birthMargin}`}>
+                            <input type="radio" value="diverce" {...register("gender", { required: false })} /> diverce
+                        </label>
+    
+                    </Stack>
+                    {errors.intern_extern && <span>This field is required</span>}
+                </Stack>
+                
 
                 {/* Phones */}
                 <Stack direction="column" gap={8} align="alignStart" max>
@@ -298,51 +321,3 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
     );
 };
 
-/*
-export const EditForm = ({ selectedRow, onSubmit }) => {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const updatedData = {
-            first_name: formData.get("first_name"),
-            last_name: formData.get("last_name"),
-            birth_date: formData.get("birth_date")
-        };
-        onSubmit(updatedData); // Обработчик обновления данных
-    };
-
-    return (
-        <>
-            <h4>Edit Person</h4>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    First Name:
-                    <input
-                        name="first_name"
-                        type="text"
-                        defaultValue={selectedRow?.first_name || ""}
-                    />
-                </label>
-                <label>
-                    Last Name:
-                    <input
-                        name="last_name"
-                        type="text"
-                        defaultValue={selectedRow?.last_name || ""}
-                    />
-                </label>
-                <label>
-                    Date of birth:
-                    <input
-                        name="birth_date"
-                        type="text"
-                        defaultValue={selectedRow?.birth_date }
-                    />
-                </label>
-
-                <button type="submit">Save Changes</button>
-            </form>
-        </>
-    );
-};
-*/

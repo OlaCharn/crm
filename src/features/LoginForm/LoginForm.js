@@ -35,7 +35,7 @@ export const LoginForm = ({ onSubmit }) => {
                     </div>
                 </Stack>
 
-            {/* Поле для пароля */}
+            {/* password field */}
             <Stack direction="row" gap={8} align="alignCenter" justify="justifyBetween" max >
                 <label htmlFor="password" className={styles.label}>Password</label>
                 <div className={styles.inputWrapper}>
@@ -51,8 +51,8 @@ export const LoginForm = ({ onSubmit }) => {
                     <div className={styles.toggleButtonWrapper}>
                         <button
                             type="button"
-                            className={styles.toggleButton} // Стиль для кнопки
-                            onClick={() => setShowPassword(prev => !prev)} // Переключение состояния
+                            className={styles.toggleButton} 
+                            onClick={() => setShowPassword(prev => !prev)} 
                         >
                             {showPassword ? <PiEyeClosed /> : <PiEye />}
                         </button>

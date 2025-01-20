@@ -7,7 +7,7 @@ import { PiEyeClosed } from "react-icons/pi";
 
 
 export const EditForm = ({ selectedRow, onSubmit, closeModal }) => {
-    const [showPassword, setShowPassword] = useState(false); // Стейт для видимости пароля
+    const [showPassword, setShowPassword] = useState(false); 
 
     const {
         register,
@@ -19,7 +19,7 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal }) => {
             name: selectedRow?.name || "",
             email: selectedRow?.email || "",
             password: selectedRow?.password || "",
-            role: selectedRow?.role || "viewer", // По умолчанию устанавливаем "viewer"
+            role: selectedRow?.role || "viewer", // "viewer"
         },
     });
 

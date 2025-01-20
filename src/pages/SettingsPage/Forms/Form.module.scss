@@ -25,8 +25,8 @@
     border: 1px solid var(--text-color-inactive);
     border-radius: var(--border-radius-s);
     transition: border-color 0.3s;
-    flex: 1;         /* Растягиваем инпуты */
-    min-width: 0;    /* Избегаем конфликтов с flex */
+    flex: 1;         
+    min-width: 0;    
 }
 .inputDate{
     font-family: var(--font-main-regular);
@@ -61,11 +61,11 @@
 }
 .inputWrapper {
     display: flex;
-    flex-direction: column; /* Поле ввода сверху, сообщение об ошибке снизу */
-    position: relative; /* Для стабильного позиционирования */
+    flex-direction: column; 
+    position: relative; 
 }
 .toggleButtonWrapper {
-    display: flex;      /* Для того чтобы кнопка располагалась по горизонтали */
+    display: flex;      
     justify-content: flex-end; 
     position: absolute;
     right: 10px;  

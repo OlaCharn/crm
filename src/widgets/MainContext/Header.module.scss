@@ -13,14 +13,14 @@
     align-items: center;
 
     &:hover {
-        opacity: 0.8; /* Пример: лёгкая прозрачность при наведении */
+        opacity: 0.8; 
         color: var(--text-color-accent-green);
     }
 }
 .iconUser{
     color: var(--text-color-accent-green);
     &:hover {
-        opacity: 0.8; /* Пример: лёгкая прозрачность при наведении */
+        opacity: 0.8; 
         color: var(--text-color-accent-blue);
     }
 }

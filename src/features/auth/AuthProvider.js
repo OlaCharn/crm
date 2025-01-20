@@ -7,16 +7,16 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [role, setRole] = useState(null);
 
-    // Логин пользователя
+    // login for user
     const login = async (username, password) => {
         try {
-            const data = await apiService.loginUser(username, password); // Вызываем apiService
-            console.log('Login successful:', data); // Логируем ответ от сервера
+            const data = await apiService.loginUser(username, password); // call apiService
+            console.log('Login successful:', data); 
             if (data.token) {
                 setUser(data.name);
                 setRole(data.role);
-                localStorage.setItem('authToken', data.token); // Сохраняем токен
-                console.log('User logged in:', data.name);
+                localStorage.setItem('authToken', data.token); // save token
+                console.log('User logged in:', data.name, data.token, data.role);
             } else {
                 throw new Error('Login failed');
             }
@@ -25,13 +25,13 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Логаут пользователя
+    // logout
     const logout = async () => {
         try {
-            await apiService.logoutUser(); // Вызываем apiService для логаута
+            await apiService.logoutUser(); // call apiService for logout
             setUser(null);
             setRole(null);
-            localStorage.removeItem('authToken'); // Удаляем токен
+            localStorage.removeItem("authToken");
         } catch (error) {
             console.error('Logout failed', error);
         }

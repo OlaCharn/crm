@@ -5,7 +5,7 @@ import { Stack } from '../../../../shared/ui/Stack/Stack';
 import { ActionButton } from '../../../../shared/ui/Buttons/ActionButton';
 
 const TextWithTOC = () => {
-    const titleRef = useRef(null); // Создаем реф для заголовка
+    const titleRef = useRef(null); 
 
     const scrollToTitle = () => {
         if (titleRef.current) {
@@ -39,8 +39,8 @@ const TextWithTOC = () => {
 
             <Stack className={styles.up}>
                 <ActionButton 
-                    variant="blue"
-                    onClick={scrollToTitle} // Используем функцию для скролла
+                    variant="green"
+                    onClick={scrollToTitle} // scroll
                 >
                     Up
                 </ActionButton>

@@ -46,8 +46,8 @@
 }
 .inputWrapper {
     display: flex;
-    flex-direction: column; /* Поле ввода сверху, сообщение об ошибке снизу */
-    position: relative; /* Для стабильного позиционирования */
+    flex-direction: column; 
+    position: relative; 
 }
 
 .button {
@@ -68,7 +68,7 @@
 }
 
 .toggleButtonWrapper {
-    display: flex;      /* Для того чтобы кнопка располагалась по горизонтали */
+    display: flex;      
     justify-content: flex-end; 
     position: absolute;
     right: 10px;  

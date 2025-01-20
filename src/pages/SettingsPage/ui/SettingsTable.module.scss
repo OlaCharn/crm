@@ -14,16 +14,18 @@
     //border: 0.5px solid var(--text-color-border-grey);
     border-radius: var(--border-radius-m);
     background-color: var(--color-white);
-    overflow-x: auto;  /* Добавляем горизонтальный скролл, если таблица не помещается */
-    max-height: 400px;  /* Максимальная высота для контейнера */
-    overflow-y: auto;   /* Вертикальный скролл */
+    overflow-x: auto;  
+    max-height: 400px;  
+    overflow-y: auto;   
+    //table-layout: fixed;
 }
+
 table {
     width: 100%;
 }
 .tableBodyContainer {
     max-height: 500px; 
-    overflow-y: auto;  /* Вертикальный скролл для строк */
+    overflow-y: auto;  
 }
 
 th, td {
@@ -35,9 +37,9 @@ th, td {
 th {
     background-color: var(--background-color-logo);
     font-weight: bold;
-    position: sticky; /* Закрепляем заголовок */
-    top: 0; /* Закрепляем на верхней части контейнера */
-    z-index: 1; /* заголовки будут поверх содержимого */
+    position: sticky;
+    top: 0; 
+    z-index: 1; 
 }
 tbody tr:hover {
     background-color: var(--background-color-button);
@@ -48,87 +50,41 @@ tbody tr:hover {
     font-size: 1.2rem;
     color: var(--text-color-accent-pink);
 }
-.smallTables{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-    gap: 16px;
 
-}
-.blockTable{
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    flex: 1;
-}
-.detailsTable {
-    flex: 1 ;
-    padding: 20px;
-    border: 0.5px solid #E0E3E5;
-    border-radius: var(--border-radius-m);
-    background-color: var(--color-white);
-    overflow-x: auto;  /* Добавляем горизонтальный скролл, если таблица не помещается */
-    height: 200px;  
-    max-height: 400px;
-    overflow-y: auto;   
-}
-
-
-/* Выбранная строка */
 .selectedRow {
     background-color: var(--selected-row); 
 }
 
-/* Цвет ховера на всех строках */
 tr:hover {
     background-color: var(--background-color-button); 
 }
 
-/* Отключаем цвет ховера для выбранной строки */
 .selectedRow:hover {
     background-color: var(--selected-row); 
 }
+.resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    cursor: col-resize;
+    background-color: transparent;
+    z-index: 1;
+    touch-action: none;
+}
 
-.notesTitle {
-    font-weight: bold;
-    background-color: var(--background-color-logo);
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--text-color-accent-blue);
-    margin-top: 15px;
+.resizer.isResizing {
+    background-color: var(--text-color-remove);
 }
-.notesBody{
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--text-color-accent-blue);
+th {
+    position: relative;
 }
+
 
 @media (max-width: 1400px) {
-    .detailsTable {
-        max-height: 200px;
-        overflow-y: auto;
-    }
-
-    .detailsTable td, .detailsTable th { 
-        font-size: var(--font-size-xssmall);  
-    }
-
-    .notesTitle {
-        font-size: var(--font-size-xssmall);
-    }
-
-    .notesBody {
-        font-size: var(--font-size-xssmall);
-    }
-
     .noMatches {
         font-size: 1rem;
     }
 }
 
-@media (max-width: 768px) {
-    .detailsTable {
-        flex: 1 1 100%; /* Каждая таблица занимает 100% ширины */
-    }
-}

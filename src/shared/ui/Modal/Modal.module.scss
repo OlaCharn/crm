@@ -25,10 +25,10 @@
 }
 
 .modalHeader {
-    display: flex;                 /* Убираем избыточное выравнивание, чтобы элементы на одной линии */
-    justify-content: space-between;   /* Заголовок и кнопка остаются слева */
-    align-items: center;           /* Вертикальное выравнивание элементов по центру */
-    margin-bottom: 16px;           /* Расстояние от заголовка к контенту */
+    display: flex;                 
+    justify-content: space-between;   
+    align-items: center;           
+    margin-bottom: 16px;           
 }
 
 
@@ -38,7 +38,7 @@
     font-size: 1.5rem;
     cursor: pointer;
     color: #000;
-    margin-left: auto;   /* Это свойство выталкивает кнопку в правую часть */
+    margin-left: auto;   
 }
 
 .modalBody {
@@ -48,48 +48,3 @@
     overflow-y: auto;
     padding-right: 20px;
 }
-/*
-
-.modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modalContent {
-    background: white;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    padding: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
-}
-
-.modalHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.closeButton {
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #000;
-}
-
-.modalBody {
-    display: flex;
-    flex-direction: column;
-}
-*/

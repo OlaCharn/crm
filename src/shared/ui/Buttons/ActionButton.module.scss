@@ -17,6 +17,11 @@
         &:hover {
             background-color: var(--text-color-accent-blue);
         }
+        &:disabled {
+            background-color: var(--text-color-border-grey);
+            color: var(--text-color-inactive);
+            cursor: not-allowed;
+        }
     }
     &.blue {
         background: var(--background-color-logo);
@@ -24,6 +29,11 @@
 
         &:hover {
             background-color: var(--color-main-dark);
+        }
+        &:disabled {
+            background-color: var(--text-color-border-grey);
+            color: var(--text-color-inactive);
+            cursor: not-allowed;
         }
     }
 }

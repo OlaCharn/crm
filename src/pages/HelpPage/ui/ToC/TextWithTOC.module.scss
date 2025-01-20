@@ -2,12 +2,12 @@
 .textWithToc {
     display: flex;
     flex-direction: column;
-    height: 80vh; /* Устанавливаем высоту на 80vh */
+    height: 80vh; 
 }
 
 .contentContainer {
-    overflow-y: auto; /* Включаем вертикальную прокрутку */
-    flex-grow: 1; /* Занимает оставшееся пространство */
+    overflow-y: auto; 
+    flex-grow: 1; 
 }
 .up {
     margin-left: auto;

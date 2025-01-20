@@ -6,7 +6,7 @@ import { PiEye } from "react-icons/pi";
 import { PiEyeClosed } from "react-icons/pi";
 
 export const AddForm = ({ onSubmit , closeModal }) => {
-    const [showPassword, setShowPassword] = useState(false); // Стейт для видимости пароля
+    const [showPassword, setShowPassword] = useState(false); // state see password fiels
 
     const {
         register,
@@ -65,16 +65,16 @@ export const AddForm = ({ onSubmit , closeModal }) => {
                     <div className={styles.inputWrapper}>
                         <input 
                             className={styles.input}
-                            type={showPassword ? "text" : "password"} // Переключение типа поля
+                            type={showPassword ? "text" : "password"} // swith between types of fields
                             {...register("password", { required: true })} 
                         />
                         {errors.password && <span className={styles.errorMessage}>Password is required</span>}
                         
-                        {/* Контейнер для кнопки для расположения её справа */}
+                        {/* right direction eye button */}
                         <div className={styles.toggleButtonWrapper}>
                             <button
                                 type="button"
-                                onClick={() => setShowPassword(prev => !prev)} // Переключение видимости
+                                onClick={() => setShowPassword(prev => !prev)} // switch on-off
                                 className={styles.toggleButton}
                             >
                                 {showPassword ? <PiEyeClosed /> : <PiEye />} 

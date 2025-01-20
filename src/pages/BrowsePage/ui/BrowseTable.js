@@ -21,8 +21,9 @@ import { AddForm } from "../Forms/AddForm.js";
 import { ArrowUp } from "../../../shared/assets/svg/ArrowUpAndDown/ArrowUp.js";
 import { ArrowDown } from "../../../shared/assets/svg/ArrowUpAndDown/ArrowDown.js";
 import { RingLoaderComponent } from "../../../shared/ui/Loader/RingLoaderComponent.js";
+import { useAuth } from "../../../features/auth/AuthProvider.js";
 
-// Кастомный фильтр для fuzzy поиска
+// fuzzy search
 const fuzzyFilter = (row, columnId, value) => {
     const match = row.getValue(columnId)?.toString().toLowerCase().includes(value.toLowerCase());
     return match;
@@ -30,122 +31,129 @@ const fuzzyFilter = (row, columnId, value) => {
 
 
 export const BrowseTable = () => {
-    const [data, setData] = useState([]); // Хранилище данных из API
+    const [data, setData] = useState([]); // API data state 
 
-    const [globalFilter, setGlobalFilter] = useState(""); //состояние для фильтра
-    const [sorting, setSorting] = useState([]);           //состояние для сортировки
-    const [activeSortColumn, setActiveSortColumn] = useState(null); //состояние для отслеживания активной колонки
-    const [selectedRow, setSelectedRow] = useState("");
+    const { role } = useAuth(); // role 
+    const isViewer = role === 'viewer';
+
+    const [globalFilter, setGlobalFilter] = useState(""); //filter state
+    const [sorting, setSorting] = useState([]);           //sorting state
+    const [activeSortColumn, setActiveSortColumn] = useState(null); //active column sort
+    const [selectedRow, setSelectedRow] = useState(""); 
+    const [columnResizing, setColumnResizing] = useState({}); // resiting column state
+
     const columnHelper = createColumnHelper();
 
-    const [selectedPhoneRow, setSelectedPhoneRow] = useState(null); // Выбранная строка для телефонов
-    const [selectedEmailRow, setSelectedEmailRow] = useState(null); // Выбранная строка для емейлов
+    const [selectedPhoneRow, setSelectedPhoneRow] = useState(null); 
+    const [selectedEmailRow, setSelectedEmailRow] = useState(null); 
     const [selectedContactRow, setSelectedContactRow] = useState(null);
     const [selectedParticipationRow, setSelectedParticipationRow] = useState(null);
 
-    const [isLoading, setIsLoading] = useState(true); // Флаг загрузки
-    const [error, setError] = useState(null); // Ошибка загрузки
+    const [isLoading, setIsLoading] = useState(true); 
+    const [error, setError] = useState(null); 
 
-    //Модальное окно
+    // Modal
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState(null);
-    const [modalTitle, setModalTitle] = useState(""); // Состояние для заголовка
+    const [modalTitle, setModalTitle] = useState(""); 
 
-    // Загрузка данных при монтировании компонента
+    // data loading by component mounting
     useEffect(() => {
         const fetchData = async () => {
-            setIsLoading(true);                                          // Устанавливаем индикатор загрузки перед вызовом API
+            setIsLoading(true);                                          
             try {
-                const fetchedData = await apiService.fetchPersons();     // Ждем выполнения API-запроса
-                setData(fetchedData);                                    // Устанавливаем данные
-                setError(null);                                          // Сбрасываем ошибку, если загрузка прошла успешно
+                const fetchedData = await apiService.fetchPersons();     
+                setData(fetchedData);                                    // set data
+                setError(null);                                          
             } catch (err) {
-                console.error("Ошибка загрузки данных:", err.message);
-                setError("No data available");                 // Устанавливаем текст ошибки
-                setData([]);                                             // Очищаем данные, если произошла ошибка
+                console.error("Error:", err.message);
+                setError("No data available");                           // set error message
+                setData([]);                                             // clear data if error
             } finally {
-                setIsLoading(false);                                     // Сбрасываем индикатор загрузки в любом случае
+                setIsLoading(false);                                     // clear loading
             }
         };
-        fetchData();                                                     // Вызываем асинхронную функцию
+        fetchData();                                                     // call async function
     }, []);
     
-    //функция для кнопки deletePerson
+    //button deletePerson
     const handleDeleteClick = async () => {
-        if (!selectedRow) return;                                     // Проверка, есть ли выбранная строка
+        if (!selectedRow) return;                                     
         try {
-            await apiService.deletePerson(selectedRow._id);          // Запрос на удаление записи по selectedRow.id
-            const fetchedData = await apiService.fetchPersons();    // Если запрос прошел успешно, перезагружаем данные с сервера
-            setData(fetchedData);                                   // Обновляем состояние с новыми данными
-            handleCloseModal();                                     // Закрытие модального окна
+            await apiService.deletePerson(selectedRow._id);          
+            const fetchedData = await apiService.fetchPersons();    // return new data after deleting
+            setData(fetchedData);                                   // set new data
+            handleCloseModal();                                     
         } catch (error) {
-            console.error("Ошибка при удалении", error);
+            console.error("Delete error", error);
         }
     };
 
-    //функция для кнопки Edit
+    //button  Edit
     const handleEditSubmit = async (updatedData) => {
         try {
-            await apiService.editPerson(selectedRow._id, updatedData);                      // Обновляем данные через API
-            const fetchedData = await apiService.fetchPersons();                            // Получаем обновленные данные из API
-            setData(fetchedData);                                                           // Обновление таблицы
-            const updatedRow = fetchedData.find(person => person._id === selectedRow._id);  // Находим обновленный объект в данных
+            await apiService.editPerson(selectedRow._id, updatedData);                      
+            const fetchedData = await apiService.fetchPersons();                            
+            setData(fetchedData);                                                           
+            const updatedRow = fetchedData.find(person => person._id === selectedRow._id);  //search data row
             if (updatedRow) {
-                setSelectedRow(updatedRow);                                                 // Устанавливаем выбранную строку в обновленный объект
+                setSelectedRow(updatedRow);                                                 //update row
             }
-            handleCloseModal();                                                             // Закрываем модальное окно
+            handleOpenModal(null, 'Person`s data was updated');
+            //handleCloseModal();                                                             
         } catch (err) {
-            console.error("Ошибка при обновлении данных:", err.message);
+            console.error("Update Error :", err.message);
         }
     };
 
-    //функция для кнопки Add
+    //button Add
     const handleAddPerson = async (data) => {
         try {
-            const jsonResponse = await apiService.addPerson(data);                         // Получаем данные от сервера
-            setData((prevData) => [...prevData, jsonResponse]);                            // Обновляем локальный список, добавляя полученные с сервера данные
-            handleCloseModal(); 
+            const jsonResponse = await apiService.addPerson(data);                         
+            setData((prevData) => [...prevData, jsonResponse]);                            
+            handleOpenModal(null, 'Person`s data was added');
+            //handleCloseModal(); 
         } catch (error) {
             console.error("Failed to add person:", error);
         }  
     };
 
-     // Открытие модального окна
+     // Modal open
     const handleOpenModal = (content, title) => {
         setModalTitle(title);
         setModalContent(content);
         setModalOpen(true);
     };
 
-    // Закрытие модального окна
+    // Modal close
     const handleCloseModal = () => {
         setModalOpen(false);
         setModalContent(null);
         setModalTitle("");
     };
     
-    // Обработчик клика по строке
+    // selected row click
     const handleRowClick = (row) => {
-        setSelectedRow(row.original);  // Используем `row.original` для получения данных строки
+        setSelectedRow(row.original);  // use `row.original` for data row
     };
 
     const handlePhoneRowClick = (index) => {
-        setSelectedPhoneRow(index); // Устанавливаем индекс выбранной строки
+        setSelectedPhoneRow(index); 
     };
     
     const handleEmailRowClick = (index) => {
-        setSelectedEmailRow(index); // Устанавливаем индекс выбранной строки
+        setSelectedEmailRow(index); 
     };
 
     const handleContactRowClick = (index) => {
-        setSelectedContactRow(index); // Устанавливаем индекс выбранной строки
+        setSelectedContactRow(index); 
     };
 
     const handleParticipationRowClick = (index) => {
-        setSelectedParticipationRow(index); // Устанавливаем индекс выбранной строки
+        setSelectedParticipationRow(index); 
     };
     
-    // Обработчик для перемещения курсора клавишами
+    // 
     const handlePhoneKeyDown = (e) => {
         if (!selectedRow?.phones || selectedRow.phones.length === 0) return;
     
@@ -166,12 +174,12 @@ export const BrowseTable = () => {
         }
     };
 
-    // Сброс selectedRow при изменении фильтра
+    // by changing in search
     useEffect(() => {
-        setSelectedRow(null); // Сбрасываем выбранную строку, когда изменяется фильтр
+        setSelectedRow(null); // Reset the selected row when the filter changes.
     }, [globalFilter]);
 
-    //Сброс selectedPhoneRow, selectedEmailRow, selectedContactRow, selectedParticipatiomRow  при изменении selectedRow
+    //reset selectedPhoneRow, selectedEmailRow, selectedContactRow, selectedParticipatiomRow  when selectedRow changes
     useEffect(() => {
         setSelectedPhoneRow(null);
         setSelectedEmailRow(null);
@@ -199,7 +207,7 @@ export const BrowseTable = () => {
                 cell: info => info.getValue(),
                 filterFn: fuzzyFilter,
                 enableSorting: true,
-                sortingFn:  (a, b) => new Date(a.original.birth_date) - new Date(b.original.birth_date), // Логика сортировки,
+                sortingFn:  (a, b) => new Date(a.original.birth_date) - new Date(b.original.birth_date), // sorting logic,
             }),
             columnHelper.accessor("intern_extern", {
                 header: "Int/Ext",
@@ -237,6 +245,7 @@ export const BrowseTable = () => {
         state: {
             globalFilter,
             sorting,
+            columnResizing,
         },
         onSortingChange: setSorting,
         onGlobalFilterChange: setGlobalFilter,
@@ -244,33 +253,35 @@ export const BrowseTable = () => {
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        getRowId: row => row._id?.toString() || "", // Проверка, если id существует
+        getRowId: row => row._id?.toString() || "", // if id exist
+        onColumnResizingChange: setColumnResizing,
+        columnResizeMode: "onChange",
     });
 
 
     
 
-    // Проверяем, есть ли отфильтрованные строки
-    const filteredRows = table.getRowModel()?.rows;               // Получаем отфильтрованные строки
-    const noMatches = filteredRows && filteredRows.length === 0;  // Если строк нет, устанавливаем флаг noMatches
+    // Check if there are any filtered rows
+    const filteredRows = table.getRowModel()?.rows;               // get filtered rows
+    const noMatches = filteredRows && filteredRows.length === 0;  // no filtered rows -> noMatches
 
     //
     const handleSort = (columnId, desc) => {
         setSorting([{ id: columnId, desc }]);
-        setActiveSortColumn(columnId); // Устанавливаем активную колонку при сортировке
+        setActiveSortColumn(columnId); // set active column by sorting
     };
 
-    // Если данные загружаются, показываем "Loading..."
+    // if data is loading see loader
     if (isLoading) {
         return <div><RingLoaderComponent /></div>;
     }
 
-    // Если произошла ошибка, показываем сообщение об ошибке
+    // if error -> see error
     if (error) {
         return <div>Error: {error}</div>;
     }
     if (!data || data.length === 0) {
-        return <div>No data available</div>; // Если данных нет
+        return <div>No data available</div>; // if no data
     }
     
     return (
@@ -297,8 +308,9 @@ export const BrowseTable = () => {
                                 onSubmit={handleAddPerson} 
                                 closeModal={handleCloseModal}
                             />,
-                            "Add Person" // Функция handleOpenModal ожидает два параметра . Без второго аргумента title остаётся undefined.
+                            "Add Person" // handleOpenModal needs 2 params 
                         )}
+                        disabled={isViewer} 
                     >
                         Add
                     </ActionButton>
@@ -318,6 +330,7 @@ export const BrowseTable = () => {
                                         <MessageForm  
                                             onclose={handleCloseModal} 
                                         />)}
+                                        disabled={isViewer} 
                     >
                         Edit
                     </ActionButton>
@@ -337,6 +350,7 @@ export const BrowseTable = () => {
                                         <MessageForm 
                                             onclose={handleCloseModal} 
                                         />)}
+                                        disabled={isViewer} 
                     >
                         Delete
                     </ActionButton>
@@ -350,14 +364,27 @@ export const BrowseTable = () => {
                         <tr key={headerGroup.id}>
                         {headerGroup.headers.map(header => (
                             
-                            <th key={header.id}>
+                            <th key={header.id} style={{
+                                width: `${header.getSize()}px`, 
+                                position: "sticky",            
+                                top: 0,                        
+                                zIndex: 2,                     
+                            }}>
                                 <Stack direction="row" justify="justifyBetween" gap={8}>
                                 {header.isPlaceholder
                                 ? null
                                 : flexRender(
-                                    header.column.columnDef.header,
-                                    header.getContext()
+                                    header.column.columnDef.header, header.getContext()
                                     )}
+                                    <div
+                                    {...{
+                                        onMouseDown: header.getResizeHandler(),
+                                        onTouchStart: header.getResizeHandler(),
+                                        className: `${styles.resizer} ${
+                                            header.column.getIsResizing() ? styles.isResizing : ""
+                                        }`,
+                                    }}
+                                    />
                                     {header.column.id !== "address" && header.column.id !== "notes" && (
                                     <Stack direction="column">
                                         <ArrowUp 
@@ -378,17 +405,17 @@ export const BrowseTable = () => {
                     ))}
                 </thead>
                 <tbody>
-                    {noMatches ? (  // Если нет отфильтрованных строк, показываем сообщение
+                    {noMatches ? (  // if no filtered rows, see this:
                         <tr>
                             <td colSpan={columns.length} >
                                 <p className={styles.noMatches}>No matches found</p>
                             </td>
                         </tr>
-                    ) : (  // Если строки есть, рендерим их
+                    ) : (  // if filtered row , see this: 
                         filteredRows?.map((row) => (
                             <tr
                                 key={row.id}
-                                onClick={() => handleRowClick(row)} // Обновляем текущую строку при клике
+                                onClick={() => handleRowClick(row)} // update by click
                                 className={
                                     selectedRow?._id === row.original._id ? styles.selectedRow : ""
                                 } 
@@ -430,8 +457,8 @@ export const BrowseTable = () => {
                     ? selectedRow.phones.map((phone, idx) => (
                         <tr
                             key={idx}
-                            onClick={() => handlePhoneRowClick(idx)} // Выделение строки по клику
-                            className={selectedPhoneRow === idx ? styles.selectedRow : ""} // Применяем стиль
+                            onClick={() => handlePhoneRowClick(idx)} // selected row by click
+                            className={selectedPhoneRow === idx ? styles.selectedRow : ""} // selected row style
                         >
                             <td>{phone.phone}</td>
                             <td>{phone.notes}</td>
@@ -468,8 +495,8 @@ export const BrowseTable = () => {
                     ? selectedRow.emails.map((email, idx) => (
                         <tr
                             key={idx}
-                            onClick={() => handleEmailRowClick(idx)} // Выделение строки по клику
-                            className={selectedEmailRow === idx ? styles.selectedRow : ""} // Применяем стиль
+                            onClick={() => handleEmailRowClick(idx)} 
+                            className={selectedEmailRow === idx ? styles.selectedRow : ""} 
                         >
                             <td>{email.email}</td>
                             <td>{email.notes}</td>
@@ -507,8 +534,8 @@ export const BrowseTable = () => {
                                 ? selectedRow.contacts.map((contact, idx) => (
                                     <tr
                                         key={idx}
-                                        onClick={() => handleContactRowClick(idx)} // Выделение строки по клику
-                                        className={selectedContactRow === idx ? styles.selectedRow : ""} // Применяем стиль
+                                        onClick={() => handleContactRowClick(idx)} 
+                                        className={selectedContactRow === idx ? styles.selectedRow : ""} 
                                     >
                                         <td>{contact.contact_date}</td>
                                         <td>{contact.contact_by}</td>
@@ -545,8 +572,8 @@ export const BrowseTable = () => {
                                 ? selectedRow.participations.map((participation, idx) => (
                                     <tr
                                         key={idx}
-                                        onClick={() => handleParticipationRowClick(idx)} // Выделение строки по клику
-                                        className={selectedParticipationRow === idx ? styles.selectedRow : ""} // Применяем стиль
+                                        onClick={() => handleParticipationRowClick(idx)} 
+                                        className={selectedParticipationRow === idx ? styles.selectedRow : ""} 
                                     >
                                         <td>{participation.participation_date}</td>
                                         <td>{participation.participation_place}</td>
@@ -598,7 +625,7 @@ export const BrowseTable = () => {
                 </div>
         </div>
         </div>
-        {/* Модальное окно */}
+        {/* Modal */}
         {isModalOpen && (
             <Modal title={modalTitle} onClose={handleCloseModal}>
                 {modalContent}
@@ -608,18 +635,3 @@ export const BrowseTable = () => {
     );
 };
 
-/*
-                                    <Stack>
-                                        <ArrowUp 
-                                        onClick={() => {
-                                            setSorting([{ id: header.column.id, desc: false }]);
-                                        }}
-                                        />
-                                        <ArrowDown 
-                                        onClick={() => {
-                                            setSorting([{ id: header.column.id, desc: true }]);
-                                            }}
-                                        />
-                                    </Stack>
-
-*/
