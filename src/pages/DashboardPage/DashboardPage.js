@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BoxWhiteBackground } from "../../shared/ui/BoxWhiteBackground/BoxWhiteBackground";
 import { Stack } from "../../shared/ui/Stack/Stack";
 import styles from "./Dashboard.module.scss"
-//import { ActionButton } from "../BrowsePage/ui/Buttons/ActionButton";
 
 const DashboardPage = () => {
     const { register,  formState: { errors }, watch } = useForm(); // React Hook Form
