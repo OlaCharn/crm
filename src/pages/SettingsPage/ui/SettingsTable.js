@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { data } from "../../../shared/assets/data/data";
+import { data } from "../../../shared/assets/data/dataUsers.js";
 import { useReactTable,
         createColumnHelper,
         flexRender,
@@ -138,6 +138,7 @@ export const SettingsTable = () => {
                                             title="Edit Person" 
                                             selectedRow={selectedRow} 
                                             closeModal={handleCloseModal}
+                                            onSubmit={handleCloseModal}
                                         />,
                                         "Edit User"
                                     )     

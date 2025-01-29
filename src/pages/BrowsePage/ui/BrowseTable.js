@@ -41,7 +41,6 @@ export const BrowseTable = () => {
     const [selectedPhoneRow, setSelectedPhoneRow] = useState(null); 
     const [selectedEmailRow, setSelectedEmailRow] = useState(null); 
     const [selectedContactRow, setSelectedContactRow] = useState(null);
-    const [selectedParticipationRow, setSelectedParticipationRow] = useState(null);
 
 
     // Modal
@@ -81,9 +80,6 @@ export const BrowseTable = () => {
         setSelectedContactRow(index); 
     };
 
-    const handleParticipationRowClick = (index) => {
-        setSelectedParticipationRow(index); 
-    };
     
     // 
     const handlePhoneKeyDown = (e) => {
@@ -116,7 +112,6 @@ export const BrowseTable = () => {
         setSelectedPhoneRow(null);
         setSelectedEmailRow(null);
         setSelectedContactRow(null);
-        setSelectedParticipationRow(null);
     }, [selectedRow]);
 
 
@@ -158,8 +153,9 @@ export const BrowseTable = () => {
             }),
             columnHelper.accessor("last_participation_date", {
                 header: "Participated",
-                cell: info => info.getValue(),
+                cell: info => info.getValue() || "No participation", // Показать дату или текст "No participation"
                 enableSorting: true,
+                sortingFn: (a, b) => new Date(a.original.last_participation_date) - new Date(b.original.last_participation_date),
             }),
             columnHelper.accessor("notes", {
                 header: "Notes",
@@ -226,6 +222,7 @@ export const BrowseTable = () => {
                         onClick={() => handleOpenModal(
                             <AddForm 
                                 closeModal={handleCloseModal}
+                                onSubmit={handleCloseModal}
                             />,
                             "Add Person" // handleOpenModal needs 2 params 
                         )}
@@ -240,6 +237,7 @@ export const BrowseTable = () => {
                                             title="Edit Person" 
                                             selectedRow={selectedRow} 
                                             closeModal={handleCloseModal}
+                                            onSubmit={handleCloseModal}
                                         />,
                                         "Edit Person"
                                     )     
@@ -351,7 +349,6 @@ export const BrowseTable = () => {
 
 
         <div className={styles.smallTables} >
-            <div className={styles.blockTable}>
             <div>
                 <h3>Phones</h3>
 
@@ -390,46 +387,44 @@ export const BrowseTable = () => {
                 </div>
                 </div>
 
-                <div>
-                <h3>Emails</h3>
+                    <div>
+                    <h3>Emails</h3>
 
-                <div className={styles.detailsTable}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Notes</th>
+                    <div className={styles.detailsTable}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody 
+                            onKeyDown={handleEmailKeyDown}  
+                            tabIndex={0}
+                        > 
+                        {selectedRow?.emails && selectedRow.emails.length > 0
+                        ? selectedRow.emails.map((email, idx) => (
+                            <tr
+                                key={idx}
+                                onClick={() => handleEmailRowClick(idx)} 
+                                className={selectedEmailRow === idx ? styles.selectedRow : ""} 
+                            >
+                                <td>{email.email}</td>
+                                <td>{email.notes}</td>
                             </tr>
-                        </thead>
-                        <tbody 
-                        onKeyDown={handleEmailKeyDown}  
-                        tabIndex={0}
-                    > 
-                    {selectedRow?.emails && selectedRow.emails.length > 0
-                    ? selectedRow.emails.map((email, idx) => (
-                        <tr
-                            key={idx}
-                            onClick={() => handleEmailRowClick(idx)} 
-                            className={selectedEmailRow === idx ? styles.selectedRow : ""} 
-                        >
-                            <td>{email.email}</td>
-                            <td>{email.notes}</td>
-                        </tr>
-                    ))
-                    : (
-                        <tr>
-                            <td colSpan={3}>
-                                <p className={styles.noMatches}></p>
-                            </td>
-                        </tr>
-                    )}
-                    </tbody>  
-                    </table>
-                </div>
-                </div>
-                </div>
+                        ))
+                        : (
+                            <tr>
+                                <td colSpan={3}>
+                                    <p className={styles.noMatches}></p>
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>  
+                        </table>
+                    </div>
+                    </div>
 
-                <div className={styles.blockTable}>
                 <div>
                 <h3>Contacted</h3>
                 <div className={styles.detailsTable}>
@@ -467,78 +462,9 @@ export const BrowseTable = () => {
                     </table>
                 </div>
                 </div>
+                </div>
 
-                <div>
-                <h3>Participated</h3>
-                <div className={styles.detailsTable}>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Place</th>
-                                <th>Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody
-                            tabIndex={0}
-                        >
-                            {selectedRow?.participations && selectedRow.participations.length > 0
-                                ? selectedRow.participations.map((participation, idx) => (
-                                    <tr
-                                        key={idx}
-                                        onClick={() => handleParticipationRowClick(idx)} 
-                                        className={selectedParticipationRow === idx ? styles.selectedRow : ""} 
-                                    >
-                                        <td>{participation.participation_date}</td>
-                                        <td>{participation.participation_place}</td>
-                                        <td>{participation.participation_notes}</td>
-                                    </tr>
-                                ))
-                                : (
-                                    <tr>
-                                        <td colSpan={3}>
-                                            <p className={styles.noMatches}></p>
-                                        </td>
-                                    </tr>
-                                )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
 
-        <div className={styles.blockTable}>
-                <div>
-                <h3>Notes</h3>
-                <div className={styles.detailsTable}>
-                    <table>
-                        <thead>
-                        </thead>
-                        <tbody>
-                        {noMatches ? ( 
-                                <tr>
-                                <td colSpan={3}>
-                                    <p className={styles.noMatches}>No matches found</p>
-                                </td>
-                            </tr>
-                            ) : (
-                        
-                            <tr>
-                                <td>
-                                    {selectedRow?.notes && selectedRow.notes.length > 0 ? (
-                                    <div>{selectedRow.notes}</div>
-                                    ) : (
-                                        null
-                                    )}
-                                </td>
-                            </tr>
-                                )}
-                        </tbody>
-                    </table>
-                </div>
-                </div>
-        </div>
-        </div>
         {/* Modal */}
         {isModalOpen && (
             <Modal title={modalTitle} onClose={handleCloseModal}>

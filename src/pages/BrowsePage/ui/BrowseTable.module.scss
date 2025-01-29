@@ -48,32 +48,56 @@ tbody tr:hover {
     font-size: 1.2rem;
     color: var(--text-color-accent-pink);
 }
-.smallTables{
+.smallTables {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: wrap; 
     width: 100%;
     gap: 16px;
+}
 
-}
-.blockTable{
+.smallTables > div {
+    flex: 1; 
+    flex-wrap: wrap; 
+    min-width: 0; 
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-    flex: 1;
+    flex-direction: column; 
 }
+
 .detailsTable {
-    flex: 1 ;
+    flex: 1;
     padding: 20px;
     border: 0.5px solid #E0E3E5;
     border-radius: var(--border-radius-m);
     background-color: var(--color-white);
-    overflow-x: auto;  
-    height: 200px;  
-    max-height: 400px;
-    overflow-y: auto;   
+    height: 100%; 
+    min-height: 200px; 
+    max-height: 400px; 
+    overflow: hidden; 
 }
 
+.detailsTable table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detailsTable tbody {
+    display: block;
+    max-height: 300px;
+    overflow-y: auto; 
+}
+
+.detailsTable thead,
+.detailsTable tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; 
+}
+td {
+    word-wrap: break-word;  /* Переносит текст, если он слишком длинный для ячейки */
+    white-space: normal;    /* Позволяет тексту переноситься */
+    overflow-wrap: break-word; /* Альтернативное свойство для старых браузеров */
+  }
 
 .selectedRow {
     background-color: var(--selected-row); 
