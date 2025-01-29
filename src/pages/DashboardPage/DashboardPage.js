@@ -1,70 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BoxWhiteBackground } from "../../shared/ui/BoxWhiteBackground/BoxWhiteBackground";
-import apiService from "../../app/Services/apiService";
 import { Stack } from "../../shared/ui/Stack/Stack";
 import styles from "./Dashboard.module.scss"
-import { RingLoaderComponent } from "../../shared/ui/Loader/RingLoaderComponent";
-import { useAuth } from "../../features/auth/AuthProvider";
 //import { ActionButton } from "../BrowsePage/ui/Buttons/ActionButton";
 
 const DashboardPage = () => {
-    const { user } = useAuth();
-    const { register, handleSubmit, formState: { errors }, watch } = useForm(); // React Hook Form
-    const [count, setCount] = useState(null); 
-    const [inactiveCount, setInactiveCount] = useState(null); 
-    const [isLoading, setIsLoading] = useState(true); 
-    const [error, setError] = useState(null); 
+    const { register,  formState: { errors }, watch } = useForm(); // React Hook Form
+    const count = 19;
+    const inactiveCount = 5;
 
-    // fetch data
-    useEffect(() => {
-        const fetchCount = async () => {
-            setIsLoading(true);
-            try {
-                const response = await apiService.countPersons(); 
-                setCount(response.count); 
-                setError(null);
-            } catch (err) {
-                console.error("Loading error:", err.message);
-                setError("No data available");
-                setCount(null);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchCount();
-    }, []);
 
-    // fetch inactive depends on month
-    const fetchInactiveCount = async (data) => {
-        const { months } = data; 
-        if (!months) return;
-        setIsLoading(true);
-        try {
-            const response = await apiService.countPersonsInactiveSinceMonths(months);
-            setInactiveCount(response.count);
-            setError(null);
-        } catch (err) {
-            console.error("Loading error:", err.message);
-            setError("No data available");
-            setInactiveCount(null);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    if (!user) {
-        return <div>Please login to access the Dashboard</div>;
-    }
-    if (isLoading) {
-        return <div> <RingLoaderComponent /> </div>;
-    }
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-    if (count === null) {
-        return <div>No data available</div>;
-    }
 
     const monthsValue = watch("months"); // watch for months
 
@@ -73,7 +19,7 @@ const DashboardPage = () => {
             <div>
             <Stack direction="column" align="alignStart" gap={32}>
                 <div>{count} persons in database.</div>
-                <form onSubmit={handleSubmit(fetchInactiveCount)}>
+                <form >
                     <Stack direction="row" gap={16} justify="justifyStart">
                         <input
                             type="number"

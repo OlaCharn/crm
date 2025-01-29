@@ -1,4 +1,5 @@
 // TODO implement proper reading of settings
+/*
 const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST || 'echo';
 const BACKEND_PORT = process.env.REACT_APP_BACKEND_PORT || 3011;
 const API_BASE_URL = `http://${BACKEND_HOST}:${BACKEND_PORT}/api`;
@@ -223,3 +224,4 @@ const apiService = {
 
 export default apiService;
 
+*/

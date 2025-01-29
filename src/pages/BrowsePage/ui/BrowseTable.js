@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-//import { data } from "../../../shared/assets/data/data";
+import { data } from "../../../shared/assets/data/data";
 import { useReactTable,
         createColumnHelper,
         flexRender,
@@ -12,7 +12,6 @@ import GlobalFilter from "./ClobalFilter";
 import styles from "./BrowseTable.module.scss"
 import { ActionButton } from "../../../shared/ui/Buttons/ActionButton.js";
 import { Stack } from "../../../shared/ui/Stack/Stack";
-import apiService from "../../../app/Services/apiService.js";
 import { Modal } from "../../../shared/ui/Modal/Modal.js";
 import { EditForm } from "../Forms/EditForm.js";
 import { DeleteForm } from "../Forms/DeleteForm.js";
@@ -20,8 +19,6 @@ import { MessageForm } from "../Forms/MessageForm.js";
 import { AddForm } from "../Forms/AddForm.js";
 import { ArrowUp } from "../../../shared/assets/svg/ArrowUpAndDown/ArrowUp.js";
 import { ArrowDown } from "../../../shared/assets/svg/ArrowUpAndDown/ArrowDown.js";
-import { RingLoaderComponent } from "../../../shared/ui/Loader/RingLoaderComponent.js";
-import { useAuth } from "../../../features/auth/AuthProvider.js";
 
 // fuzzy search
 const fuzzyFilter = (row, columnId, value) => {
@@ -31,10 +28,7 @@ const fuzzyFilter = (row, columnId, value) => {
 
 
 export const BrowseTable = () => {
-    const [data, setData] = useState([]); // API data state 
 
-    const { role } = useAuth(); // role 
-    const isViewer = role === 'viewer';
 
     const [globalFilter, setGlobalFilter] = useState(""); //filter state
     const [sorting, setSorting] = useState([]);           //sorting state
@@ -49,80 +43,12 @@ export const BrowseTable = () => {
     const [selectedContactRow, setSelectedContactRow] = useState(null);
     const [selectedParticipationRow, setSelectedParticipationRow] = useState(null);
 
-    const [isLoading, setIsLoading] = useState(true); 
-    const [error, setError] = useState(null); 
 
     // Modal
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState(null);
     const [modalTitle, setModalTitle] = useState(""); 
 
-    // data loading by component mounting
-    useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true);                                          
-            try {
-                const fetchedData = await apiService.fetchPersons();     
-                setData(fetchedData);                                    // set data
-                setError(null);                                          
-            } catch (err) {
-                console.error("Error:", err.message);
-                setError("No data available");                           // set error message
-                setData([]);                                             // clear data if error
-            } finally {
-                setIsLoading(false);                                     // clear loading
-            }
-        };
-        fetchData();                                                     // call async function
-    }, []);
-    
-    //button deletePerson
-    const handleDeleteClick = async () => {
-        if (!selectedRow) return;                                     
-        try {
-            await apiService.deletePerson(selectedRow._id);          
-            const fetchedData = await apiService.fetchPersons();    // return new data after deleting
-            setData(fetchedData);                                   // set new data
-            handleCloseModal();                                     
-        } catch (error) {
-            console.error("Delete error", error);
-        }
-    };
-
-    //button  Edit
-    const handleEditSubmit = async (updatedData) => {
-        try {
-            await apiService.editPerson(selectedRow._id, updatedData);                      
-            const fetchedData = await apiService.fetchPersons();                            
-            setData(fetchedData);                                                           
-            const updatedRow = fetchedData.find(person => person._id === selectedRow._id);  //search data row
-            if (updatedRow) {
-                setSelectedRow(updatedRow);                                                 //update row
-            }
-            handleOpenModal(null, 'Person`s data was updated');
-            //handleCloseModal close in 1.5 sec;        
-            setTimeout(() => {
-                handleCloseModal(); 
-            }, 1500);                                                     
-        } catch (err) {
-            console.error("Update Error :", err.message);
-        }
-    };
-
-    //button Add
-    const handleAddPerson = async (data) => {
-        try {
-            const jsonResponse = await apiService.addPerson(data);                         
-            setData((prevData) => [...prevData, jsonResponse]);                            
-            handleOpenModal(null, 'Person`s data was added');
-            //handleCloseModal close in 1.5 sec;        
-            setTimeout(() => {
-                handleCloseModal(); 
-            }, 1500);                                                     
-        } catch (error) {
-            console.error("Failed to add person:", error);
-        }  
-    };
 
      // Modal open
     const handleOpenModal = (content, title) => {
@@ -277,18 +203,6 @@ export const BrowseTable = () => {
         setActiveSortColumn(columnId); // set active column by sorting
     };
 
-    // if data is loading see loader
-    if (isLoading) {
-        return <div><RingLoaderComponent /></div>;
-    }
-
-    // if error -> see error
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-    if (!data || data.length === 0) {
-        return <div>No data available</div>; // if no data
-    }
     
     return (
         <> 
@@ -311,12 +225,10 @@ export const BrowseTable = () => {
                         variant="green"
                         onClick={() => handleOpenModal(
                             <AddForm 
-                                onSubmit={handleAddPerson} 
                                 closeModal={handleCloseModal}
                             />,
                             "Add Person" // handleOpenModal needs 2 params 
                         )}
-                        disabled={isViewer} 
                     >
                         Add
                     </ActionButton>
@@ -327,7 +239,6 @@ export const BrowseTable = () => {
                                         <EditForm 
                                             title="Edit Person" 
                                             selectedRow={selectedRow} 
-                                            onSubmit={handleEditSubmit} 
                                             closeModal={handleCloseModal}
                                         />,
                                         "Edit Person"
@@ -336,7 +247,6 @@ export const BrowseTable = () => {
                                         <MessageForm  
                                             onclose={handleCloseModal} 
                                         />)}
-                                        disabled={isViewer} 
                     >
                         Edit
                     </ActionButton>
@@ -347,7 +257,6 @@ export const BrowseTable = () => {
                                         <DeleteForm 
                                             title="Delete Person" 
                                             selectedRow={selectedRow} 
-                                            onDelete={handleDeleteClick} 
                                             onCancel={handleCloseModal} 
                                         />,
                                         "Delete Person"
@@ -356,7 +265,6 @@ export const BrowseTable = () => {
                                         <MessageForm 
                                             onclose={handleCloseModal} 
                                         />)}
-                                        disabled={isViewer} 
                     >
                         Delete
                     </ActionButton>

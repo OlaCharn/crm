@@ -1,3 +1,4 @@
+/*
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import apiService from '../../app/Services/apiService';
 
@@ -70,3 +71,4 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => useContext(AuthContext);
 
+*/
