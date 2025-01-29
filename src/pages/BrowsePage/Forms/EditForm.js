@@ -224,7 +224,7 @@ export const EditForm = ({ selectedRow, onSubmit, closeModal,  title }) => {
                 </Stack>
                 
                 <Stack gap={4} max justify="justifyBetween">
-                    <label className={styles.label}>Participation Place:</label>
+                    <label className={styles.label}>Ethics (?)</label>
                     <input className={styles.input} {...register("participation_place", { required: false })} />
                 </Stack>
                 

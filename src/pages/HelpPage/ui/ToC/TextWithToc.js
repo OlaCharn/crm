@@ -17,25 +17,31 @@ const TextWithTOC = () => {
         <Stack
             direction="column"
             className={styles.textWithToc}
+            
         >
-            <div className={styles.contentContainer}>
-            <h2 ref={titleRef}>Titeln</h2>
-            <ul>
-                {sections.map((section) => (
-                    <li key={section.id}>
-                        <a href={`#${section.id}`}>{section.title}</a>
-                    </li>
-                ))}
-            </ul>
+            <Stack
+                direction='column'
+                gap={16}
+                align='alignStart'
+                justify='justifyStart'
+                className={styles.contentContainer}>
+                <h2 ref={titleRef}>Context</h2>
+                <ul>
+                    {sections.map((section) => (
+                        <li key={section.id}>
+                            <a href={`#${section.id}`}>{section.title}</a>
+                        </li>
+                    ))}
+                </ul>
 
-            {sections.map((section) => (
-                <section key={section.id} id={section.id}>
-                    <h3>{section.title}</h3>
-                    <p>{section.content}</p>
-                    
-                </section>
-            ))}
-            </div>
+                {sections.map((section) => (
+                    <section key={section.id} id={section.id}>
+                        <h3>{section.title}</h3>
+                        <div>{section.content}</div>
+                        
+                    </section>
+                ))}
+            </Stack>
 
             <Stack className={styles.up}>
                 <ActionButton 

@@ -100,7 +100,10 @@ export const BrowseTable = () => {
                 setSelectedRow(updatedRow);                                                 //update row
             }
             handleOpenModal(null, 'Person`s data was updated');
-            //handleCloseModal();                                                             
+            //handleCloseModal close in 1.5 sec;        
+            setTimeout(() => {
+                handleCloseModal(); 
+            }, 1500);                                                     
         } catch (err) {
             console.error("Update Error :", err.message);
         }
@@ -112,7 +115,10 @@ export const BrowseTable = () => {
             const jsonResponse = await apiService.addPerson(data);                         
             setData((prevData) => [...prevData, jsonResponse]);                            
             handleOpenModal(null, 'Person`s data was added');
-            //handleCloseModal(); 
+            //handleCloseModal close in 1.5 sec;        
+            setTimeout(() => {
+                handleCloseModal(); 
+            }, 1500);                                                     
         } catch (error) {
             console.error("Failed to add person:", error);
         }  

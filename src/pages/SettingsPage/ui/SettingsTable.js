@@ -89,7 +89,11 @@ export const SettingsTable = () => {
             if (updatedRow) {
                 setSelectedRow(updatedRow);                                                 
             }
-            handleCloseModal();                                                             
+            handleCloseModal();    
+            //handleCloseModal close in 1.5 sec;        
+            setTimeout(() => {
+                handleCloseModal(); 
+            }, 1500);                                                     
         } catch (err) {
             console.error("Updating error:", err.message);
         }
@@ -101,6 +105,10 @@ export const SettingsTable = () => {
             const jsonResponse = await apiService.registerUser(data);                         
             setData((prevData) => [...prevData, jsonResponse]);                            
             handleCloseModal(); 
+            //handleCloseModal close in 1.5 sec;        
+            setTimeout(() => {
+                handleCloseModal(); 
+            }, 1500);                                                     
         } catch (error) {
             console.error("Failed to add person:", error);
             // alert, if error 409 (user exists)

@@ -10,8 +10,10 @@ const apiService = {
     //BrowsePage
     deletePerson: async (personId) => {
         console.log(personId)
+        const token = localStorage.getItem('authToken');
         const response = await fetch(`${API_BASE_URL}/persons/deletePerson/${personId}`, {
             method: "DELETE",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         });
 
         if (!response.ok) {
@@ -26,9 +28,10 @@ const apiService = {
         }
     },
     addPerson: async (data) => {
+        const token = localStorage.getItem('authToken');
         const response = await fetch(`${API_BASE_URL}/persons/addPerson`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
             body: JSON.stringify(data),
         });
         if (!response.ok) {
@@ -39,37 +42,56 @@ const apiService = {
         return jsonResponse;
     },
     editPerson: async (personId, data) => {
+        const token = localStorage.getItem('authToken');
         const response = await fetch(`${API_BASE_URL}/persons/updatePerson/${personId}`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json" , "Authorization": `Bearer ${token}` },
             body: JSON.stringify(data),
         });
         return response.json();
     },
     fetchPersons: async () => {
-        const response = await fetch(`${API_BASE_URL}/persons/getPersons`);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${API_BASE_URL}/persons/getPersons`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        })
         return response.json();
     },
     //DashboardPage
     countPersons: async () => {
-        const response = await fetch(`${API_BASE_URL}/persons/countPersons`);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${API_BASE_URL}/persons/countPersons` , {
+            method: "GET",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        });
         return response.json();
     },
     countPersonsInactiveSinceMonths: async (months) => {
-        const response = await fetch(`${API_BASE_URL}/persons/countPersonsInactiveSinceMonths/${months}`);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${API_BASE_URL}/persons/countPersonsInactiveSinceMonths/${months}` , {
+            method: "GET",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        });
         return response.json();
     },
     //SettingsPage
     getUsers: async () => {
-        const response = await fetch(`${API_BASE_URL}/users/getUsers`);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${API_BASE_URL}/users/getUsers` , {
+            method: "GET",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        });
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         return response.json();
     },
     deleteUser: async (userId) => {
+        const token = localStorage.getItem('authToken');
         const response = await fetch(`${API_BASE_URL}/users/deleteUser/${userId}`, {
             method: "DELETE",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         });
 
         if (!response.ok) {
@@ -87,9 +109,10 @@ const apiService = {
     },
     registerUser: async (data) => {
         try {
+            const token = localStorage.getItem('authToken');
             const response = await fetch(`${API_BASE_URL}/users/registerUser`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                 body: JSON.stringify(data),
             });
             if (!response.ok) {
@@ -108,19 +131,19 @@ const apiService = {
         }
     },
     updateUser: async (userId, data) => {
+        const token = localStorage.getItem('authToken');
         const response = await fetch(`${API_BASE_URL}/users/updateUser/${userId}`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
             body: JSON.stringify(data),
         });
         return response.json();
     }, 
     loginUser: async (username, password) => {
-            try {
-            
+        try {
             const response = await fetch(`${API_BASE_URL}/users/loginUser`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json",},
                 body: JSON.stringify({ "name": username, "password": password }),
             });
     
@@ -132,7 +155,7 @@ const apiService = {
             }
     
             const data = await response.json();
-            console.log("Response from server:", data);  
+            //console.log("Response from server:", data);  
     
             // save token in localStorage
             if (data.token) {
@@ -145,15 +168,18 @@ const apiService = {
             throw error;  
         }
     }, 
-    logoutUser: async () => {
+    logoutUser: async (username) => {
         try {
             //console.log("api logout")
+        
+            const token = localStorage.getItem('authToken');
             const response = await fetch(`${API_BASE_URL}/users/logoutUser`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
                 // additional params, if needs (for example, exit token)
-                body: JSON.stringify({
-                }),
+                body: JSON.stringify({ "name": username }),
             });
     
             if (!response.ok) {
@@ -164,6 +190,31 @@ const apiService = {
             return { success: true };
         } catch (error) {
             console.error("Logout Error", error);
+            throw error;
+        }
+    },
+
+    getUserFromToken: async (token) => {
+        try {   
+            const response = await fetch(`${API_BASE_URL}/users/getMe`, {
+                method: "GET",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    "Authorization": `Bearer ${token}` 
+                },
+            });
+    
+            //console.log('Response status:', response.status); 
+    
+            if (!response.ok) {
+                throw new Error(`Failed to fetch user: ${response.statusText}`);
+            }
+    
+            const data = await response.json();
+            //console.log('User data:', data); 
+            return data;
+        } catch (error) {
+            console.error('Error fetching user from token:', error);
             throw error;
         }
     },

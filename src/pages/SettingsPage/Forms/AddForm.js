@@ -17,7 +17,7 @@ export const AddForm = ({ onSubmit , closeModal }) => {
     });
 
     const submitForm = (data) => {
-        console.log("Submitted Data:", data);
+        //console.log("Submitted Data:", data);
         reset();
         onSubmit(data); // Call the onSubmit prop if needed
     };
